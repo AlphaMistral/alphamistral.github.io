@@ -176,8 +176,8 @@
 <p><img src="/image/essay2/1.jpg" alt="">
 <img src="/image/essay2/2.jpg" alt="">
 <img src="/image/essay2/3.jpg" alt=""></p>
-<p>我不太懂物理, 姑且理解为雾霾因自身受到的重力而产生了沉积作用, 使得距离地面较近的区域雾浓度特别高, 但是一旦高过某个阈值, 浓度则开始急剧下降.</p>
-<p>以上属于大萌喵的不懂装懂辣鸡解释. 如果某位大侠能够科学地解释一下, 大萌喵感激不尽.</p>
+<p>我不太懂物理:drooling_face:, 姑且理解为雾霾因自身受到的重力而产生了沉积作用, 使得距离地面较近的区域雾浓度特别高, 但是一旦高过某个阈值, 浓度则开始急剧下降.</p>
+<p>以上属于我的不懂装懂辣鸡解释. 如果某位大侠能够科学地解释一下, 我感激不尽.</p>
 <p>以上三张照片全部来自谷歌图片, 摄于Dubai.
 知道了Vertical Fog是什么东西之后, 我们就需要知道这个特效有什么用.
 在很多Top-Down类型的游戏(比如LOL, Dota, Space Marshall)中想要加入雾特效的话, 使用传统的基于距离和深度的雾特效会导致效果失真. 这是因为Top-Down的视角是比较广的, 简单粗暴地糊上一层雾会导致许多距离摄像机较远, 但又很重要的部分被渲染为白茫茫的雾. 与此相反, 我们只希望在放置GameObject的那一层产生比较集中的雾, 因此可以考虑基于每一个点的世界坐标决定其雾的浓度.</p>
@@ -197,8 +197,8 @@
 </ul>
 <p>很明显, 只要能知道某一点的世界Y坐标, 那什么问题都解决了.</p>
 <h2>一个Naive的思路 (直白而低效)</h2>
-<p>在片元着色器中逆推出每一个片元的View Space坐标, 然后乘以_InverseView矩阵将之转化回World Space.
-首先我们将片元屏幕坐标重新映射到[-1, 1]的区间以回归到NDC Space, 随后将NDC Space转化为View Space, 再通过从C#脚本传入的摄像机的世界-摄像机变换矩阵的逆求出其世界坐标.</p>
+<p>在片元着色器中逆推出每一个片元的View Space坐标, 然后乘以_InverseView矩阵将之转化回World Space.</p>
+<p>首先我们将片元屏幕坐标重新映射到[-1, 1]的区间以回归到NDC Space, 随后将NDC Space转化为View Space, 再通过从C#脚本传入的摄像机的世界-摄像机变换矩阵的逆求出其世界坐标.😏</p>
 <p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="keyword">float</span> depth = LinearEyeDepth ( SAMPLE_DEPTH_TEXTURE( _CameraDepthTexture, i.uv ) ); </div><div class="line">float2 p11_22 = float2 ( unity_CameraProjection._11, unity_CameraProjection._22 ); </div><div class="line">float3 vpos = float3( ( i.uv * <span class="number">2</span> - <span class="number">1</span>) / p11_22, <span class="number">-1</span> ) * depth; </div><div class="line">float4 wpos = mul( _InverseView, float4( vpos, <span class="number">1</span> ) ); </div><div class="line"><span class="keyword">return</span> wpos.y / <span class="number">10</span>;<span class="comment">//下文中会说到为什么写得这么奇怪.</span></div></pre></td></tr></table></figure></p>
 <p>这段程序中vpos的计算过程为了让代码看起来简单点而做了一点变化, 更加直观的方式是这样的:</p>
 <p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line">float2 ndc = i.uv * <span class="number">2</span> - <span class="number">1</span>;</div><div class="line">float3 vpos;</div><div class="line">vpos.x = ndc / p11_22.x * depth;</div><div class="line">vpos.y = ndc / p11_22.y * depth;</div><div class="line">vpos.z = -depth;</div></pre></td></tr></table></figure></p>
@@ -212,8 +212,8 @@
 $$</p>
 <p>点元着色器的坐标变化处理过程如下:</p>
 <p><img src="/image/essay2/6.png" alt=""></p>
-<p>(这个图是DirectX的版本, 换到OpenGL的话, 倒数第二个框框中y的处理应该和x一样)
-我们现在相当于在倒数第二个框框内, 唯一不同的是我们采用的是uv坐标, 范围是[0, 1]而并非[0, width]与[0, height]. 因此第二段程序所做的, 就是利用uv坐标来求出NDC Space坐标. 注意, 到此为止完全和Z没有任何关系. 所以我们只需要让x分量除以$\frac {2n} {r - l}$, 让y分量除以$\frac {2n} {t - b}$即可.</p>
+<p>(这个图是DirectX的版本, 换到OpenGL的话, 倒数第二个框框中y的处理应该和x一样)</p>
+<p>我们现在相当于在倒数第二个框框内, 唯一不同的是我们采用的是uv坐标, 范围是[0, 1]而并非[0, width]与[0, height]. 因此第二段程序所做的, 就是利用uv坐标来求出NDC Space坐标. 注意, 到此为止完全和Z没有任何关系. 所以我们只需要让x分量除以$\frac {2n} {r - l}$, 让y分量除以$\frac {2n} {t - b}$即可.</p>
 <p>转化回NDC Space后, 由于我们本质上已经做过了标准化和剪裁, 因此倒数第四个与第五个框框跳过, 我们的逆推过程进入到了蓝色的大框框中. 而根据坐标变换规则, 我们有如下等式:</p>
 <p>$$
 x^{'} = \frac {nP_{x}} {-P_{z}}
@@ -229,16 +229,16 @@ $$</p>
 <p><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">material.SetMatrix ( &quot;_InverseView&quot;, GetComponent&lt;Camera&gt; ().cameraToWorldMatrix );</div></pre></td></tr></table></figure></p>
 <p>然后, 乘以这个矩阵即可:</p>
 <p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line">float4 wpos = mul ( _InverseView, vpos );</div></pre></td></tr></table></figure></p>
-<p>现在说明下为什么我们最后要查看的是wpos.y / 10. 其实这个10是我顺手敲上去的(卖个萌), 人眼对于暗色的分辨能力高于对明亮颜色的分辨能力, 因此这个过程非常类似于Gamma Correction. 但是为什么我这没有用乘方的形式进行校正呢? 这是因为严格意义上来讲我们输出的是&quot;坐标&quot;, 而游戏场景中的坐标可能会比较大, 比如厨房的柜子顶端其y轴坐标就达到了2.5m. 因此不如简单粗暴地除以10, 这样也很容易查看我们最后的结果是否正常.</p>
+<p>现在说明下为什么我们最后要查看的是<strong>wpos.y / 10</strong>. 其实这个10是我顺手敲上去的😆, 人眼对于暗色的分辨能力高于对明亮颜色的分辨能力, 因此这个过程非常类似于Gamma Correction. 但是为什么我这没有用乘方的形式进行校正呢? 这是因为严格意义上来讲我们输出的是&quot;坐标&quot;, 而游戏场景中的坐标可能会比较大, 比如厨房的柜子顶端其y轴坐标就达到了<strong>2.5m</strong>. 因此不如简单粗暴地除以10, 这样也很容易查看我们最后的结果是否正常😝.</p>
 <p><img src="/image/essay2/7.png" alt=""></p>
 <p>如图所示, 越高的地方越明亮.</p>
 <h2>但是, 我们不希望Naive</h2>
 <h3>分析</h3>
-<p>为什么上面介绍的方法不好? 我们都知道矩阵乘法是一个颇为耗资源的一个操作, 哪怕搬到GPU上也一样. 而上面的做法是在片元着色器中做坐标转换, 屏幕分辨率是多少就做了多少次矩阵乘法 ...</p>
+<p>为什么上面介绍的方法不好? 我们都知道矩阵乘法是一个颇为耗资源的一个操作, 哪怕搬到GPU上也一样. 而上面的做法是在片元着色器中做坐标转换, <strong>屏幕分辨率是多少就做了多少次矩阵乘法</strong> ... 😅</p>
 <h3>方法</h3>
-<p>不知道读者是不是和我一样有一种感觉: 一个特定的ViewPort Position和一个特定的深度值, 是能够唯一确定一个世界坐标的. 我不会画图 ... 诸位脑补一下哈, 透视投影的过程中, 处在同一条从摄像机射出的射线上的点, 最终会被绘制到同一个位置上. (这也就是深度测试的意义之一 --- 只让最近的那个点被绘制出来). 但是如果我们又同时知道了射线上的某个点到摄像机的距离, 那么这个点就是唯一确定的.</p>
+<p>不知道读者是不是和我一样有一种感觉: 一个特定的ViewPort Position和一个特定的深度值, 是能够唯一确定一个世界坐标的. 我不会画图 ... 诸位脑补一下哈, 透视投影的过程中, 处在同一条从摄像机射出的射线上的点, 最终会被绘制到同一个位置上. (这也就是深度测试的意义之一 --- 只让最近的那个点被绘制出来). 但是如果我们又同时知道了射线上的某个点到摄像机的距离, 那么这个点就是唯一确定的😠.</p>
 <p>那么最后我们要得到的世界坐标就是ray * depth + _WorldSpaceCameraPos.</p>
-<p>恩, 如果能快速得到这条射线就好了. 其实得到这条射线的方法简单的令人发指.</p>
+<p>恩, 如果能快速得到这条射线就好了. 其实得到这条射线的方法简单的令人发指😚.</p>
 <ul>
 <li>我们可以在C#脚本中计算出摄像机到其View Frustum的远剪裁面的四个角的世界坐标射线.</li>
 <li>对于全屏幕的后期特效, 其实就是一个全屏幕的Quad, 四个顶点. 一个顶点对应上述的一个角.</li>
@@ -259,7 +259,7 @@ uv.x = 0, uv.y = 1 ------ index = 0;</p>
 <h2>计算雾的浓度</h2>
 <p>首先我们获取每一个片元的世界坐标. 由于射线射向的是远剪裁面, 因此这里将DepthBuffer Linearize的时候不要转化成EyeSpace ... 应该是01Space.</p>
 <p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="keyword">float</span> depth = Linear01Depth ( SAMPLE_DEPTH_TEXTURE ( _CameraDepthTexture, UnityStereoScreenSpaceUVAdjust ( i.uv, _CameraDepthTexture_ST ) ) ); </div><div class="line">float3 worldPos = ( depth * i.interpolatedRay ).xyz + _WorldSpaceCameraPos;</div></pre></td></tr></table></figure></p>
-<p>然后应用一个随着高度指数衰减的密度函数就可以了, 在这里大萌喵随便写了一个, 仅供参考啦:</p>
+<p>然后应用一个随着高度指数衰减的密度函数就可以了, 在这里我随便写了一个, 仅供参考啦😸:</p>
 <p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="keyword">return</span> lerp (tex2D (_MainTex, i.uv), _FogColor, saturate(<span class="built_in">exp</span>(-worldPos.y - _Start) * _Density));</div></pre></td></tr></table></figure></p>
 <h3>最终效果</h3>
 <p><img src="/image/essay2/5.png" alt=""></p>
@@ -295,8 +295,8 @@ uv.x = 0, uv.y = 1 ------ index = 0;</p>
                     
                     
                     <li class="next">
-                        <a href="/2017/02/10/essay1/" data-toggle="tooltip" data-placement="top"
-                           title="SSAO及其优化">Next Post &rarr;</a>
+                        <a href="/2017/02/10/hello-world/" data-toggle="tooltip" data-placement="top"
+                           title="Hello World">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
