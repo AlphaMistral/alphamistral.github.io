@@ -191,22 +191,23 @@
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
 <h2>Vertical Fog (垂直雾) 是什么</h2>
 <p>想必大家都知道雾特效, 一般来讲, 距离摄像机越远的点, 其受到雾特效的影响会越为严重. 这是最为常见的雾特效.</p>
-<p>但是还有一种雾, 在某一点的浓度与其和观察点间的距离关系似乎并不大, 而与其世界位置坐标有非常紧密的联系.</p>
+<p><img src="/image/essay2/8.jpg" alt=""></p>
+<p>但是还有一种雾, 在某一点的浓度与其和观察点间的距离关系似乎并不大, 而与其<strong>世界位置坐标</strong>有非常紧密的联系.</p>
 <p><img src="/image/essay2/1.jpg" alt="">
 <img src="/image/essay2/2.jpg" alt="">
 <img src="/image/essay2/3.jpg" alt=""></p>
-<p>我不太懂物理:drooling_face:, 姑且理解为雾霾因自身受到的重力而产生了沉积作用, 使得距离地面较近的区域雾浓度特别高, 但是一旦高过某个阈值, 浓度则开始急剧下降.</p>
-<p>以上属于我的不懂装懂辣鸡解释. 如果某位大侠能够科学地解释一下, 我感激不尽.</p>
-<p>以上三张照片全部来自谷歌图片, 摄于Dubai.
-知道了Vertical Fog是什么东西之后, 我们就需要知道这个特效有什么用.
-在很多Top-Down类型的游戏(比如LOL, Dota, Space Marshall)中想要加入雾特效的话, 使用传统的基于距离和深度的雾特效会导致效果失真. 这是因为Top-Down的视角是比较广的, 简单粗暴地糊上一层雾会导致许多距离摄像机较远, 但又很重要的部分被渲染为白茫茫的雾. 与此相反, 我们只希望在放置GameObject的那一层产生比较集中的雾, 因此可以考虑基于每一个点的世界坐标决定其雾的浓度.</p>
+<p>我不太懂物理, 姑且理解为雾霾因自身受到的重力而产生了沉积作用, 使得距离地面较近的区域雾浓度特别高, 但是一旦高过某个阈值, 浓度则开始急剧下降.</p>
+<p>以上属于我的不懂装懂辣鸡解释. 如果某位大侠能够科学地解释一下, 感激不尽.</p>
+<p>以上三张照片全部来自谷歌图片, 摄于<em>Dubai</em>.</p>
+<p>知道了Vertical Fog是什么东西之后, 我们就需要知道这个特效有什么用.</p>
+<p>在很多Top-Down类型的游戏(比如LOL, Dota, Space Marshall)中想要加入雾特效的话, 使用传统的基于距离和深度的雾特效会导致效果失真. 这是因为Top-Down的视角是比较广的, 简单粗暴地糊上一层雾会导致许多距离摄像机较远, 但又很重要的部分被渲染为白茫茫的雾. 与此相反, 我们只希望在放置GameObject的那一层产生比较集中的雾, 因此可以考虑基于每一个点的世界坐标决定其雾的浓度.</p>
 <p>本文将要实现基于Image Effect的Vertical Fog效果. 当然了思路是相通的, 如果想要局部地添加雾特效, 也可以将类似的着色器特效应用于模型上, 然后注意调整模型的Blend与ZTest就好了.</p>
 <h2>猜一猜这个特效要怎么实现</h2>
 <p>恩, 假设我们什么都不知道, 只有一个处理前的图和处理后的效果图:</p>
-<p><img src="/image/essay2/4.png" alt="">
-原图</p>
-<p><img src="/image/essay2/5.png" alt="">
-处理后</p>
+<p><img src="/image/essay2/4.png" alt=""></p>
+<p>原图</p>
+<p><img src="/image/essay2/5.png" alt=""></p>
+<p>处理后</p>
 <p>通过上面的两张图, 我们能得到如下的结论:</p>
 <ul>
 <li>1	某点的雾的浓度, 和该点的世界Y坐标有关系.</li>
@@ -222,13 +223,11 @@
 <p>这段程序中vpos的计算过程为了让代码看起来简单点而做了一点变化, 更加直观的方式是这样的:</p>
 <p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line">float2 ndc = i.uv * <span class="number">2</span> - <span class="number">1</span>;</div><div class="line">float3 vpos;</div><div class="line">vpos.x = ndc / p11_22.x * depth;</div><div class="line">vpos.y = ndc / p11_22.y * depth;</div><div class="line">vpos.z = -depth;</div></pre></td></tr></table></figure></p>
 <p>unity_CameraProjection中存储的是投影矩阵. (这个是OpenGL的版本)其形式如下:</p>
-<p>$$
-\begin{pmatrix} \frac {2n} {r - l} &amp; 0 &amp; \frac {r + l} {r - l} &amp; 0 \
-0 &amp; \frac {2n} {t - b} &amp; \frac {t + b} {t - b} &amp; 0 \
-0 &amp; 0 &amp; \frac {-(f + n)} {f - n} &amp; \frac {-2fn} {f - n} \
-0 &amp; 0 &amp; -1 &amp; 0
-\end{pmatrix}
-$$</p>
+<p><span>$$\begin{pmatrix} \frac {2n} {r - l} &amp; 0 &amp; \frac {r + l} {r - l} &amp; 0 \\
+&Tab;0 &amp; \frac {2n} {t - b} &amp; \frac {t + b} {t - b} &amp; 0 \\
+&Tab;0 &amp; 0 &amp; \frac {-(f + n)} {f - n} &amp; \frac {-2fn} {f - n} \\ 
+&Tab;0 &amp; 0 &amp; -1 &amp; 0 \\
+\end{pmatrix}$$</span><!-- Has MathJax --></p>
 <p>点元着色器的坐标变化处理过程如下:</p>
 <p><img src="/image/essay2/6.png" alt=""></p>
 <p>(这个图是DirectX的版本, 换到OpenGL的话, 倒数第二个框框中y的处理应该和x一样)</p>
@@ -256,7 +255,7 @@ $$</p>
 <p>为什么上面介绍的方法不好? 我们都知道矩阵乘法是一个颇为耗资源的一个操作, 哪怕搬到GPU上也一样. 而上面的做法是在片元着色器中做坐标转换, <strong>屏幕分辨率是多少就做了多少次矩阵乘法</strong> ... 😅</p>
 <h3>方法</h3>
 <p>不知道读者是不是和我一样有一种感觉: 一个特定的ViewPort Position和一个特定的深度值, 是能够唯一确定一个世界坐标的. 我不会画图 ... 诸位脑补一下哈, 透视投影的过程中, 处在同一条从摄像机射出的射线上的点, 最终会被绘制到同一个位置上. (这也就是深度测试的意义之一 --- 只让最近的那个点被绘制出来). 但是如果我们又同时知道了射线上的某个点到摄像机的距离, 那么这个点就是唯一确定的😠.</p>
-<p>那么最后我们要得到的世界坐标就是ray * depth + _WorldSpaceCameraPos.</p>
+<p>那么最后我们要得到的世界坐标就是$ray * depth + _WorldSpaceCameraPos$.</p>
 <p>恩, 如果能快速得到这条射线就好了. 其实得到这条射线的方法简单的令人发指😚.</p>
 <ul>
 <li>我们可以在C#脚本中计算出摄像机到其View Frustum的远剪裁面的四个角的世界坐标射线.</li>
@@ -267,12 +266,12 @@ $$</p>
 <p><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Matrix4x4 frustumCorners = Matrix4x4.identity; </div><div class="line">float fovWHalf = camFov * 0.5f; </div><div class="line">Vector3 toRight = m_camTrans.right * camNear * Mathf.Tan (fovWHalf * Mathf.Deg2Rad) * camAspect; </div><div class="line">Vector3 toTop = m_camTrans.up * camNear * Mathf.Tan (fovWHalf * Mathf.Deg2Rad); </div><div class="line">Vector3 topLeft = (m_camTrans.forward * camNear - toRight + toTop); </div><div class="line">float camScale = topLeft.magnitude * camFar/camNear; </div><div class="line">topLeft.Normalize(); </div><div class="line">topLeft *= camScale; </div><div class="line">Vector3 topRight = (m_camTrans.forward * camNear + toRight + toTop); </div><div class="line">topRight.Normalize(); </div><div class="line">topRight *= camScale; Vector3 bottomRight = (m_camTrans.forward * camNear + toRight - toTop); </div><div class="line">bottomRight.Normalize(); </div><div class="line">bottomRight *= camScale; </div><div class="line">Vector3 bottomLeft = (m_camTrans.forward * camNear - toRight - toTop);</div><div class="line">bottomLeft.Normalize(); bottomLeft *= camScale; </div><div class="line">frustumCorners.SetRow (0, topLeft); </div><div class="line">frustumCorners.SetRow (1, topRight); </div><div class="line">frustumCorners.SetRow (2, bottomRight); </div><div class="line">frustumCorners.SetRow (3, bottomLeft); </div><div class="line">material.SetMatrix (&quot;_FrustumCornersWS&quot;, frustumCorners);</div></pre></td></tr></table></figure></p>
 <p>现在我们的问题是如何让这个矩阵代表的四个角与Screen Quad的四个角一一对应.</p>
 <p>通过观察, 我们得到了如下关系:</p>
-<p>uv.x = 0, uv.y = 0 ------ index = 3;
-uv.x = 1, uv.y = 0 ------ index = 2;
-uv.x = 1, uv.x = 1 ------ index = 1;
-uv.x = 0, uv.y = 1 ------ index = 0;</p>
+<p>uv.x = 0, uv.y = 0 ------ index = 3;</p>
+<p>uv.x = 1, uv.y = 0 ------ index = 2;</p>
+<p>uv.x = 1, uv.x = 1 ------ index = 1;</p>
+<p>uv.x = 0, uv.y = 1 ------ index = 0;</p>
 <p>我们需要知道一个函数F(x, y) = index, 使其能符合上述关系. 否则我们在点元着色器中就要使用if来判断x与y的关系, 从而和z一一对应. 摆脱了矩阵乘法, 然后引入了一坨if ... 这波真亏.
-容易推知如下关系: F(x, y) = abs (3 - x - 3 * y).</p>
+容易推知如下关系: $F(x, y) = abs (3 - x - 3 * y)$.</p>
 <h3>重获新生的点元着色器</h3>
 <p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="function">v2f <span class="title">vert</span> <span class="params">(appdata_img v)</span> </span></div><div class="line">&#123; </div><div class="line">	v2f o; </div><div class="line">	o.vertex = mul(UNITY_MATRIX_MVP, v.vertex); </div><div class="line">	o.uv = v.texcoord.xy; </div><div class="line">	<span class="keyword">int</span> xx = (<span class="keyword">int</span>)v.vertex.x; <span class="keyword">int</span> yy = (<span class="keyword">int</span>)v.vertex.y; </div><div class="line">	<span class="keyword">int</span> z = <span class="built_in">abs</span> (<span class="number">3</span> - xx - <span class="number">3</span> * yy); </div><div class="line">	o.interpolatedRay = _FrustumCornersWS[ z ]; </div><div class="line">	o.interpolatedRay.w = ( v.vertex.z ); <span class="keyword">return</span> o; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h2>计算雾的浓度</h2>
