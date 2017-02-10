@@ -213,9 +213,11 @@ $$
 <p><img src="/image/essay1/7.png" alt="">
 上图为引入随机噪声后的采样结果. 我们发现&quot;油漆&quot;变成了&quot;沙子&quot;.</p>
 <h3>模糊/滤波</h3>
+<blockquote>
 <p>&quot;油漆&quot;好还是&quot;沙子&quot;好?
-都不好!
-油漆&quot;显得平淡无奇, &quot;沙子&quot;让人眼花缭乱. 中国人讲究中庸之道, 也就是说 ---- 我们需要一个&quot;中频&quot;的AO!</p>
+都不好!</p>
+</blockquote>
+<p>油漆&quot;显得平淡无奇, &quot;沙子&quot;让人眼花缭乱. 中国人讲究中庸之道, 也就是说 ---- 我们需要一个&quot;中频&quot;的AO!</p>
 <p>在此介绍两种方法. 第一种方法是直接模糊. 比较常用的是高斯模糊. 关于高斯模糊的资料有很多, 本文不再赘述.</p>
 <p>第二种方法在采样原理上和高斯模糊别无二致, 只是采样系数由静态变为动态: 原点与采样点的UV坐标距离, 法线和深度关系共同决定采样系数, 距离越远采样系数越小, 法线和深度的差距越大则采样系数也越大. 这样的模糊使得结果更加趋近于中频, 进一步减弱了闪烁(Flickering)的效果.</p>
 <h3>与ColorBuffer混合</h3>
@@ -233,8 +235,10 @@ $$
 <p>SSAO最为耗时的操作是模拟多个采样点并计算其AO贡献值, 因此我们应该想办法避免重复计算, 尽量使用以前的结果. 这里可以使用Reverse Reprojection(反向二次投影), 保存上一帧的AO计算信息, 使得当前帧中相对上一帧没有变化的点可以利用旧的AO信息, 避免重复计算. 这种方式称为SSAO with Temporal Coherence(时间相干性), 简称为TSSAO. 具体的实现方式将在下文中进行阐述.</p>
 <h3>3. 滤波与精确计算之间的矛盾</h3>
 <p>这也是一个Trade Off ---- 反正运算结果都是要套用滤波来过滤掉噪点, 那么最开始计算的时候就可以想办法在保证质量不受太大影响的前提下, 尽量提升效率. 举一个例子:</p>
+<blockquote>
 <p>假设有两个面饼师傅, 第一个师傅的工作是揉出来5个直径为1.2cm的面球, 第二个师傅的工作是把这5个面球放在一起拍成一个面饼.
 我们不讨论这种工作方式是否合理, 只是在此情况下第一个师傅确实不用对1.2cm吹毛求疵, 只要差不多就行了.</p>
+</blockquote>
 <p>明白了这个道理, 就会发现可以在计算AO的时候使用降采样, 这样能成平方倍地降低SSAO的时间复杂度. 关于降采样网上有很多资料, 我的专栏第一篇文章也对此有过介绍.</p>
 <h2>TSSAO</h2>
 <h3>1. Reverse Reprojection</h3>
@@ -328,11 +332,11 @@ $$
 
                 <ul class="pager">
                     
-                    
-                    <li class="next">
+                    <li class="previous">
                         <a href="/2017/02/10/hello-world/" data-toggle="tooltip" data-placement="top"
-                           title="Hello World">Next Post &rarr;</a>
+                           title="Hello World">&larr; Previous Post</a>
                     </li>
+                    
                     
                 </ul>
 
