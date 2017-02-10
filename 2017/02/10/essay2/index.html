@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="null">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="Weymire" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Vertical Fog及在Fragment Shader中重建世界坐标｜Weymire&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.weymire.com/2017/02/10/essay2/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('//o7bkkhiex.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Weymire
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://ol56no7p4.bkt.clouddn.com/essay2.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://ol56no7p4.bkt.clouddn.com/essay2.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Vertical Fog及在Fragment Shader中重建世界坐标</h1>
+                    
+                    <span class="meta">
+                         作者 Jingping Yu
+                        <span>
+                          日期 2017-02-10
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Vertical Fog及在Fragment Shader中重建世界坐标
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>本文同时也发表在我的<a href="https://zhuanlan.zhihu.com/p/24160707?refer=MeowShader" target="_blank" rel="external">知乎专栏</a>上😄.
+作者：音速键盘猫
+链接：https://zhuanlan.zhihu.com/p/24160707?refer=MeowShader
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<h2>Vertical Fog (垂直雾) 是什么</h2>
+<p>想必大家都知道雾特效, 一般来讲, 距离摄像机越远的点, 其受到雾特效的影响会越为严重. 这是最为常见的雾特效.</p>
+<p>但是还有一种雾, 在某一点的浓度与其和观察点间的距离关系似乎并不大, 而与其世界位置坐标有非常紧密的联系.</p>
+<p><img src="/image/essay2/1.jpg" alt="">
+<img src="/image/essay2/2.jpg" alt="">
+<img src="/image/essay2/3.jpg" alt=""></p>
+<p>我不太懂物理, 姑且理解为雾霾因自身受到的重力而产生了沉积作用, 使得距离地面较近的区域雾浓度特别高, 但是一旦高过某个阈值, 浓度则开始急剧下降.</p>
+<p>以上属于大萌喵的不懂装懂辣鸡解释. 如果某位大侠能够科学地解释一下, 大萌喵感激不尽.</p>
+<p>以上三张照片全部来自谷歌图片, 摄于Dubai.
+知道了Vertical Fog是什么东西之后, 我们就需要知道这个特效有什么用.
+在很多Top-Down类型的游戏(比如LOL, Dota, Space Marshall)中想要加入雾特效的话, 使用传统的基于距离和深度的雾特效会导致效果失真. 这是因为Top-Down的视角是比较广的, 简单粗暴地糊上一层雾会导致许多距离摄像机较远, 但又很重要的部分被渲染为白茫茫的雾. 与此相反, 我们只希望在放置GameObject的那一层产生比较集中的雾, 因此可以考虑基于每一个点的世界坐标决定其雾的浓度.</p>
+<p>本文将要实现基于Image Effect的Vertical Fog效果. 当然了思路是相通的, 如果想要局部地添加雾特效, 也可以将类似的着色器特效应用于模型上, 然后注意调整模型的Blend与ZTest就好了.</p>
+<h2>猜一猜这个特效要怎么实现</h2>
+<p>恩, 假设我们什么都不知道, 只有一个处理前的图和处理后的效果图:</p>
+<p><img src="/image/essay2/4.png" alt="">
+原图</p>
+<p><img src="/image/essay2/5.png" alt="">
+处理后</p>
+<p>通过上面的两张图, 我们能得到如下的结论:</p>
+<ul>
+<li>1	某点的雾的浓度, 和该点的世界Y坐标有关系.</li>
+<li>2	某点的雾的浓度, 和摄像机的位置, FOV, 角度等都没有任何关系.</li>
+<li>3	雾的浓度符合某种数学公式, 使其沉积在了比较低的区域.</li>
+<li>4	这个特效适合俯视被观察区域的情况. 如果身在雾中的话, 恐怕什么都看不清楚.</li>
+</ul>
+<p>很明显, 只要能知道某一点的世界Y坐标, 那什么问题都解决了.</p>
+<h2>一个Naive的思路 (直白而低效)</h2>
+<p>在片元着色器中逆推出每一个片元的View Space坐标, 然后乘以_InverseView矩阵将之转化回World Space.
+首先我们将片元屏幕坐标重新映射到[-1, 1]的区间以回归到NDC Space, 随后将NDC Space转化为View Space, 再通过从C#脚本传入的摄像机的世界-摄像机变换矩阵的逆求出其世界坐标.</p>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="keyword">float</span> depth = LinearEyeDepth ( SAMPLE_DEPTH_TEXTURE( _CameraDepthTexture, i.uv ) ); </div><div class="line">float2 p11_22 = float2 ( unity_CameraProjection._11, unity_CameraProjection._22 ); </div><div class="line">float3 vpos = float3( ( i.uv * <span class="number">2</span> - <span class="number">1</span>) / p11_22, <span class="number">-1</span> ) * depth; </div><div class="line">float4 wpos = mul( _InverseView, float4( vpos, <span class="number">1</span> ) ); </div><div class="line"><span class="keyword">return</span> wpos.y / <span class="number">10</span>;<span class="comment">//下文中会说到为什么写得这么奇怪.</span></div></pre></td></tr></table></figure></p>
+<p>这段程序中vpos的计算过程为了让代码看起来简单点而做了一点变化, 更加直观的方式是这样的:</p>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line">float2 ndc = i.uv * <span class="number">2</span> - <span class="number">1</span>;</div><div class="line">float3 vpos;</div><div class="line">vpos.x = ndc / p11_22.x * depth;</div><div class="line">vpos.y = ndc / p11_22.y * depth;</div><div class="line">vpos.z = -depth;</div></pre></td></tr></table></figure></p>
+<p>unity_CameraProjection中存储的是投影矩阵. (这个是OpenGL的版本)其形式如下:</p>
+<p>$$
+\begin{pmatrix} \frac {2n} {r - l} &amp; 0 &amp; \frac {r + l} {r - l} &amp; 0 \
+0 &amp; \frac {2n} {t - b} &amp; \frac {t + b} {t - b} &amp; 0 \
+0 &amp; 0 &amp; \frac {-(f + n)} {f - n} &amp; \frac {-2fn} {f - n} \
+0 &amp; 0 &amp; -1 &amp; 0
+\end{pmatrix}
+$$</p>
+<p>点元着色器的坐标变化处理过程如下:</p>
+<p><img src="/image/essay2/6.png" alt=""></p>
+<p>(这个图是DirectX的版本, 换到OpenGL的话, 倒数第二个框框中y的处理应该和x一样)
+我们现在相当于在倒数第二个框框内, 唯一不同的是我们采用的是uv坐标, 范围是[0, 1]而并非[0, width]与[0, height]. 因此第二段程序所做的, 就是利用uv坐标来求出NDC Space坐标. 注意, 到此为止完全和Z没有任何关系. 所以我们只需要让x分量除以$\frac {2n} {r - l}$, 让y分量除以$\frac {2n} {t - b}$即可.</p>
+<p>转化回NDC Space后, 由于我们本质上已经做过了标准化和剪裁, 因此倒数第四个与第五个框框跳过, 我们的逆推过程进入到了蓝色的大框框中. 而根据坐标变换规则, 我们有如下等式:</p>
+<p>$$
+x^{'} = \frac {nP_{x}} {-P_{z}}
+$$
+$$
+y^{'} = \frac {nP_{y}} {-P_{z}}
+$$
+$$
+z^{'} = n
+$$</p>
+<p>OpenGL中View Space的Z轴正方向背离View Frustum. 而通过CameraDepthTexture我们得到的值均为正, 因此需要特殊变换一下.</p>
+<p>OK, 到此为止我们已经成功将Screen Space丢到了View Space中, 我们只需要在C#脚本中插入如下代码, 就可以将世界-摄像机变换矩阵的逆传入:</p>
+<p><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">material.SetMatrix ( &quot;_InverseView&quot;, GetComponent&lt;Camera&gt; ().cameraToWorldMatrix );</div></pre></td></tr></table></figure></p>
+<p>然后, 乘以这个矩阵即可:</p>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line">float4 wpos = mul ( _InverseView, vpos );</div></pre></td></tr></table></figure></p>
+<p>现在说明下为什么我们最后要查看的是wpos.y / 10. 其实这个10是我顺手敲上去的(卖个萌), 人眼对于暗色的分辨能力高于对明亮颜色的分辨能力, 因此这个过程非常类似于Gamma Correction. 但是为什么我这没有用乘方的形式进行校正呢? 这是因为严格意义上来讲我们输出的是&quot;坐标&quot;, 而游戏场景中的坐标可能会比较大, 比如厨房的柜子顶端其y轴坐标就达到了2.5m. 因此不如简单粗暴地除以10, 这样也很容易查看我们最后的结果是否正常.</p>
+<p><img src="/image/essay2/7.png" alt=""></p>
+<p>如图所示, 越高的地方越明亮.</p>
+<h2>但是, 我们不希望Naive</h2>
+<h3>分析</h3>
+<p>为什么上面介绍的方法不好? 我们都知道矩阵乘法是一个颇为耗资源的一个操作, 哪怕搬到GPU上也一样. 而上面的做法是在片元着色器中做坐标转换, 屏幕分辨率是多少就做了多少次矩阵乘法 ...</p>
+<h3>方法</h3>
+<p>不知道读者是不是和我一样有一种感觉: 一个特定的ViewPort Position和一个特定的深度值, 是能够唯一确定一个世界坐标的. 我不会画图 ... 诸位脑补一下哈, 透视投影的过程中, 处在同一条从摄像机射出的射线上的点, 最终会被绘制到同一个位置上. (这也就是深度测试的意义之一 --- 只让最近的那个点被绘制出来). 但是如果我们又同时知道了射线上的某个点到摄像机的距离, 那么这个点就是唯一确定的.</p>
+<p>那么最后我们要得到的世界坐标就是ray * depth + _WorldSpaceCameraPos.</p>
+<p>恩, 如果能快速得到这条射线就好了. 其实得到这条射线的方法简单的令人发指.</p>
+<ul>
+<li>我们可以在C#脚本中计算出摄像机到其View Frustum的远剪裁面的四个角的世界坐标射线.</li>
+<li>对于全屏幕的后期特效, 其实就是一个全屏幕的Quad, 四个顶点. 一个顶点对应上述的一个角.</li>
+<li>点元着色器输出至片元着色器的过程中自带插值 ... 我们什么都不用做, 就这么华丽丽地得到了想要的射线.</li>
+</ul>
+<p>求View Frustum四个角的世界坐标的C#程序:</p>
+<p><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Matrix4x4 frustumCorners = Matrix4x4.identity; </div><div class="line">float fovWHalf = camFov * 0.5f; </div><div class="line">Vector3 toRight = m_camTrans.right * camNear * Mathf.Tan (fovWHalf * Mathf.Deg2Rad) * camAspect; </div><div class="line">Vector3 toTop = m_camTrans.up * camNear * Mathf.Tan (fovWHalf * Mathf.Deg2Rad); </div><div class="line">Vector3 topLeft = (m_camTrans.forward * camNear - toRight + toTop); </div><div class="line">float camScale = topLeft.magnitude * camFar/camNear; </div><div class="line">topLeft.Normalize(); </div><div class="line">topLeft *= camScale; </div><div class="line">Vector3 topRight = (m_camTrans.forward * camNear + toRight + toTop); </div><div class="line">topRight.Normalize(); </div><div class="line">topRight *= camScale; Vector3 bottomRight = (m_camTrans.forward * camNear + toRight - toTop); </div><div class="line">bottomRight.Normalize(); </div><div class="line">bottomRight *= camScale; </div><div class="line">Vector3 bottomLeft = (m_camTrans.forward * camNear - toRight - toTop);</div><div class="line">bottomLeft.Normalize(); bottomLeft *= camScale; </div><div class="line">frustumCorners.SetRow (0, topLeft); </div><div class="line">frustumCorners.SetRow (1, topRight); </div><div class="line">frustumCorners.SetRow (2, bottomRight); </div><div class="line">frustumCorners.SetRow (3, bottomLeft); </div><div class="line">material.SetMatrix (&quot;_FrustumCornersWS&quot;, frustumCorners);</div></pre></td></tr></table></figure></p>
+<p>现在我们的问题是如何让这个矩阵代表的四个角与Screen Quad的四个角一一对应.</p>
+<p>通过观察, 我们得到了如下关系:</p>
+<p>uv.x = 0, uv.y = 0 ------ index = 3;
+uv.x = 1, uv.y = 0 ------ index = 2;
+uv.x = 1, uv.x = 1 ------ index = 1;
+uv.x = 0, uv.y = 1 ------ index = 0;</p>
+<p>我们需要知道一个函数F(x, y) = index, 使其能符合上述关系. 否则我们在点元着色器中就要使用if来判断x与y的关系, 从而和z一一对应. 摆脱了矩阵乘法, 然后引入了一坨if ... 这波真亏.
+容易推知如下关系: F(x, y) = abs (3 - x - 3 * y).</p>
+<h3>重获新生的点元着色器</h3>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="function">v2f <span class="title">vert</span> <span class="params">(appdata_img v)</span> </span></div><div class="line">&#123; </div><div class="line">	v2f o; </div><div class="line">	o.vertex = mul(UNITY_MATRIX_MVP, v.vertex); </div><div class="line">	o.uv = v.texcoord.xy; </div><div class="line">	<span class="keyword">int</span> xx = (<span class="keyword">int</span>)v.vertex.x; <span class="keyword">int</span> yy = (<span class="keyword">int</span>)v.vertex.y; </div><div class="line">	<span class="keyword">int</span> z = <span class="built_in">abs</span> (<span class="number">3</span> - xx - <span class="number">3</span> * yy); </div><div class="line">	o.interpolatedRay = _FrustumCornersWS[ z ]; </div><div class="line">	o.interpolatedRay.w = ( v.vertex.z ); <span class="keyword">return</span> o; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2>计算雾的浓度</h2>
+<p>首先我们获取每一个片元的世界坐标. 由于射线射向的是远剪裁面, 因此这里将DepthBuffer Linearize的时候不要转化成EyeSpace ... 应该是01Space.</p>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="keyword">float</span> depth = Linear01Depth ( SAMPLE_DEPTH_TEXTURE ( _CameraDepthTexture, UnityStereoScreenSpaceUVAdjust ( i.uv, _CameraDepthTexture_ST ) ) ); </div><div class="line">float3 worldPos = ( depth * i.interpolatedRay ).xyz + _WorldSpaceCameraPos;</div></pre></td></tr></table></figure></p>
+<p>然后应用一个随着高度指数衰减的密度函数就可以了, 在这里大萌喵随便写了一个, 仅供参考啦:</p>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="keyword">return</span> lerp (tex2D (_MainTex, i.uv), _FogColor, saturate(<span class="built_in">exp</span>(-worldPos.y - _Start) * _Density));</div></pre></td></tr></table></figure></p>
+<h3>最终效果</h3>
+<p><img src="/image/essay2/5.png" alt=""></p>
+
+                <hr>
+                
+                <!-- 多说 Share start -->
+                <div class="ds-share"
+                     style="text-align: right"
+                     data-thread-key="2017/02/10/essay2/"
+                     data-title="Vertical Fog及在Fragment Shader中重建世界坐标"
+                     data-url="http://www.weymire.com/2017/02/10/essay2/"
+                     data-images="http://www.weymire.com/2017/02/10/essay2/essay2.jpg"
+                     data-content="本文同时也发表在我的知乎专栏上😄.
+作者：音速键盘猫
+链接：https://zhuanlan... | Weymire&#39;s Blog ">
+                    <div class="ds-share-inline">
+                        <ul class="ds-share-icons-16">
+                            <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                            <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                            <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                            <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        </ul>
+                        <div class="ds-share-icons-more">
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/02/10/essay1/" data-toggle="tooltip" data-placement="top"
+                           title="SSAO及其优化">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                         data-thread-key="2017/02/10/essay2/"
+                         data-title="Vertical Fog及在Fragment Shader中重建世界坐标"
+                         data-url="http://www.weymire.com/2017/02/10/essay2/">
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">Vertical Fog (垂直雾) 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">猜一猜这个特效要怎么实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">一个Naive的思路 (直白而低效)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">但是, 我们不希望Naive</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">重获新生的点元着色器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">计算雾的浓度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">最终效果</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'yujingping';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user};
+    (function () {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';
+        ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/ehazon">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/yu-jing-ping-64">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/haojen">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/AlphaMistral">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Weymire 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.weymire.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91741512-1';
+    var _gaDomain = 'auto';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = 'a7bea2767d4659bf7b7a4f62100a2a13';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="image/avatar.jpg"><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>
