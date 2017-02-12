@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="null">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="Weymire" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        相交高亮(扫描效果)｜Weymire&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.weymire.com/2016/11/27/essay3/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('../image/tags.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Weymire
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/Portfolio/">Portfolio</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">Featured Tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://ol56no7p4.bkt.clouddn.com/essay3.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://ol56no7p4.bkt.clouddn.com/essay3.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>相交高亮(扫描效果)</h1>
+                    
+                    <h2 class="subheading">多用于科幻游戏中的Intersection Highlight特效</h2>
+                    
+                    <span class="meta">
+                         作者 Jingping Yu
+                        <span>
+                          日期 2016-11-27
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Unity"
+                           title="Unity">Unity</a>
+                        
+                        <a class="tag" href="/tags/#Computer Graphics"
+                           title="Computer Graphics">Computer Graphics</a>
+                        
+                        <a class="tag" href="/tags/#Shader"
+                           title="Shader">Shader</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            相交高亮(扫描效果)
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>本文同时也发表在我的<a href="https://zhuanlan.zhihu.com/p/23971284?refer=MeowShader" target="_blank" rel="external">知乎专栏</a>上😄. 不过当时写作的风格实在不适合技术文, 因此在个人博客中的这篇文章经过了一些修改.</p>
+<blockquote>
+<p>作者：音速键盘猫</p>
+<p>链接：https://zhuanlan.zhihu.com/p/23971284?refer=MeowShader</p>
+<p>来源：知乎</p>
+<p>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+<h2>相交高亮(Intersection Highlight)是什么</h2>
+<p>相交高亮, 是一种附加在Mesh上的着色器特效, 其功能是将所有其他穿过该Mesh表面的截面轮廓绘制出来, 产生一种类似于扫描一样的效果. 多用于<strong>科幻类游戏</strong>中.</p>
+<p><img src="/image/essay3/2.jpg" alt=""></p>
+<p>在这里我要检讨下 ... 这种相交高亮的特效出现的频次真心不低, 我能确切想起来的实际应用游戏便有<em>杀戮地带</em>系列, <em>质量效应</em>系列, <em>泰坦陨落</em>系列和<em>死亡空间</em>系列. 不过在youtube上找了好几圈也没有找到一个包含了这个效果的视频 ... 所以说只能贴上这张图啦.</p>
+<h2>相交高亮着色器工作原理</h2>
+<p>获取当前摄像机渲染的场景的<strong>DepthBuffer</strong>, 在渲染当前模型的时候判断每一个经过坐标变换的片元的世界坐标Z是否和DepthBuffer的对应点深度足够接近. 如果足够接近, 则将其渲染成另一种颜色.</p>
+<h2>猜一猜实现的方法</h2>
+<p><img src="/image/essay3/3.png" alt=""></p>
+<p>我们要实现的就是那个正方体的材质. 从图中我们清楚的看到, 水壶, 电脑和键盘在正方体外面的部分是非常正常的, 在正方体内部的部分蒙上了一层黄色. <strong>但是和正方体的相交截面的外轮廓被绘制成了蓝颜色</strong>.</p>
+<p>到此, 我们能够推断出来的事实有:</p>
+<ul>
+<li>
+<p>1	Blend Mode为: Blend SrcAlpha OneMinusSrcAlpha 原因很简单, 因为我们能够通过正方体看到其后面的物体, 这说明正方体本身的颜色和原本的ColorBuffer的Alpha值被&quot;平分秋色&quot;后进行了混合. 依然看不懂的童鞋请参见<a href="https://docs.unity3d.com/Manual/SL-Blend.html" target="_blank" rel="external">Unity官方文档</a>.</p>
+</li>
+<li>
+<p>2	RenderQueue为Transparent 很明显, 我们当然是希望这个正方体在Geometry后渲染出来, 这样才能透过它看到优先渲染的Opaque Materials. 关于Render Order的详细描述可以看<a href="https://docs.unity3d.com/462/Documentation/Manual/SL-SubshaderTags.html" target="_blank" rel="external">Unity官方文档</a>.</p>
+</li>
+<li>
+<p>3	正因为我们的正方体是被后渲染出来的, 所以我们可以通过当前的ColorBuffer或者是DepthBuffer等资源来以某种方式处理相交截面.</p>
+</li>
+<li>
+<p>4	但是不管截面到底是怎么被处理出来的, 我们必须得知道屏幕上某点的世界坐标相对于正方体某个片元的世界坐标的相对关系.</p>
+</li>
+</ul>
+<p>很明显, 我们要做的就是优雅地解决第四个问题.</p>
+<h2>如何优雅地求坐标</h2>
+<p>可以通过DepthBuffer, 摄像机Near Clip Plane, Far Clip Plane, Field of View来计算出屏幕上每一个点的世界坐标, 但是传统的在片元着色器中计算世界坐标的方式是处理后依次乘以世界-视图矩阵的逆, 效率堪忧. 就算利用点元着色器预先计算视椎体射线, 效率有了些许提升, 也远远达不到&quot;优雅&quot;的水准.
+(PS: 我会在后面的文章中详细介绍Global Fog后期处理特效, 其中会对在片元着色器中通过DepthBuffer计算世界坐标的方法展开讨论. )</p>
+<p>说了这么多, 我们发现直接求世界坐标这种套路最直接, 最好理解, 但似乎并不太可取. 那么我们就要思考一个问题: 我们真的必须得知道具体的世界坐标嘛?</p>
+<p>通过观察上面的那张图, 我们发现为了确定如何渲染并混合颜色, 我们只需要知道相对于摄像机来讲, 正方体的片元和原本场景中对应位置的像素谁离得更远就行了. <strong>也就是说, 我们只需要知道两个三维向量的长度, 也就是两个实数, 而并不需要知道这两个三维向量的xyz都分别是什么</strong>.</p>
+<p>所以说, 求世界坐标的话有点儿杀鸡用牛刀了.</p>
+<h2>如何获取一个片元所在屏幕坐标的DepthBuffer</h2>
+<p><img src="/image/essay3/4.png" alt=""></p>
+<p>我们是如何知道一个片元的投影坐标的呢?</p>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line">o.pos = mul ( UNITY_MATRIX_MVP, v.vertex );</div></pre></td></tr></table></figure></p>
+<p>那么我们要怎么通过世界坐标来将其xy分量映射到[0, 1]区间呢? 毕竟只有这样我们才能采样DepthBuffer啊! 在UnityCG.cginc中, 有这么个函数:</p>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">inline</span> float4 <span class="title">ComputeNonStereoScreenPos</span><span class="params">(float4 pos)</span> </span></div><div class="line">&#123; </div><div class="line">	float4 o = pos * <span class="number">0.5f</span>; </div><div class="line">	<span class="meta">#<span class="meta-keyword">if</span> defined(UNITY_HALF_TEXEL_OFFSET) </span></div><div class="line">	o.xy = float2(o.x, o.y*_ProjectionParams.x) + o.w * _ScreenParams.zw; </div><div class="line">	<span class="meta">#<span class="meta-keyword">else</span> </span></div><div class="line">	o.xy = float2(o.x, o.y*_ProjectionParams.x) + o.w; </div><div class="line">	<span class="meta">#<span class="meta-keyword">endif</span> o.zw = pos.zw; </span></div><div class="line">	<span class="keyword">return</span> o; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>多数情况下上述代码也可以直接写成以下形式:</p>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">inline</span> float4 <span class="title">ComputeScreenPos</span> <span class="params">(float4 pos)</span> </span></div><div class="line">&#123; </div><div class="line">	float4 o = pos * <span class="number">0.5</span>; </div><div class="line">	o.xy = float2(o.x, o.y*_ProjectionParams.x) + o.w; </div><div class="line">	o.zw = pos.zw; </div><div class="line">	<span class="keyword">return</span> o; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>看起来有点复杂 ... 先乘个0.5然后再加上w分量的二分之一 ... ?</p>
+<h2>&quot;乘以0.5然后加上w分量的二分之一&quot;到底是什么</h2>
+<p>首先上个图</p>
+<p><img src="/image/essay3/5.png" alt=""></p>
+<p>在Unity中, mul ( UNITY_MATRIX_MVP, v.vertex )和UnityObjectToClipPos(float4 ( v.vertex.xyz, 1.0 ) )干的差不多都是一回事儿, 就是将模型坐标转换到摄像机的Homogeneous Clip Space. 详情参见<a href="https://docs.unity3d.com/Manual/SL-BuiltinFunctions.html" target="_blank" rel="external">官方文档</a>(其实我个人更加推荐用UnityObjectToClipPos来代替传统的乘以MVP矩阵. 尤其是涉及到用GPU Generate Object的时候, 直接乘以MVP矩阵往往得到的是错误的结果).</p>
+<p>但是, 一般渲染管线不会立刻将Clip后的坐标标准化(也就是除以w分量), 而是在点元着色函数结束以后将其标准化. 这个地方有点坑.</p>
+<blockquote>
+<p>Once all the vertices are transformed to clip space a final operation called perspective division is performed where we divide the x, y and z components of the position vectors by the vector's homogeneous w component; perspective division is what transforms the 4D clip space coordinates to 3D normalized device coordinates. <strong>This step is performed automatically at the end of each vertex shader run</strong>.</p>
+</blockquote>
+<p>所以, 可以认为我们现在得到的是已经经过Clipping, 但是还没有标准化的投影坐标. 我们的目的是要将这个坐标转化为xy在[0, 1]之间, 而z反映深度的屏幕坐标.</p>
+<p>既然是[0, 1]之间, 那么我们自然就不用向上图一样乘以ViewPort宽高了. 同时要注意ViewPort坐标原点的问题: Unity中是左下角, 而上图采用的是左上角. 所以具体到我们的情况下y和x的处理方式应该是相同的.</p>
+<p>为了将[-1, 1]映射到[0, 1]上, 将原坐标加1然后除2是显而易见的. 但是要注意我们的x和y都比人家多乘着一个w分量. 因为运算到这个时候我们依然在点元着色器函数中, <strong>因此最终的标准化过程还没有执行</strong>.</p>
+<p>所以, 我们就得到了下面这段代码(其实也是上面那段)</p>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line">float4 o = pos * <span class="number">0.5</span>;</div><div class="line">o.xy = float2(o.x, o.y*_ProjectionParams.x) + o.w;</div></pre></td></tr></table></figure></p>
+<h2>点元着色器</h2>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="function">v2f <span class="title">vert</span> <span class="params">( appdata_base v )</span> </span></div><div class="line">&#123; </div><div class="line">	v2f o; </div><div class="line">	o.pos = UnityObjectToClipPos ( v.vertex ); </div><div class="line">	o.projPos = ComputeScreenPos ( o.pos ); </div><div class="line">	<span class="keyword">return</span> o; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2>非常简单的片元着色器函数</h2>
+<p>在片元着色器中, 我们只需要提取出对应屏幕位置的深度信息, 然后和点元着色器的输出深度信息作比较, 根据相差结果进行插值即可.</p>
+<p><figure class="highlight"><table><tr><td class="code"><pre><div class="line">fixed4 frag ( v2f i ) : SV_TARGET </div><div class="line">&#123; </div><div class="line">	float4 finalColor = _MainColor; </div><div class="line">	float sceneZ = LinearEyeDepth (tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos))); </div><div class="line">	float partZ = i.projPos.z; </div><div class="line">	float diff = min ( (abs(sceneZ - partZ)) / _Threshold, 1); </div><div class="line">	finalColor = lerp(_HighlightColor, _MainColor, diff); </div><div class="line">	return finalColor; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2>最终效果</h2>
+<p><img src="/image/essay3/6.png" alt=""></p>
+<h2>后记</h2>
+<p>其实这个特效的原理真心一点也不复杂, 只是用到了DepthTexture来获取屏幕中每个像素的深度信息来进行比对以决定模型最终的颜色. 但是UnityCG.cginc里面的ComputeScreenPos函数那个奇怪的外观引发了我极大的好奇心.</p>
+
+                <hr>
+                
+                <!-- 多说 Share start -->
+                <div class="ds-share"
+                     style="text-align: right"
+                     data-thread-key="2016/11/27/essay3/"
+                     data-title="相交高亮(扫描效果)"
+                     data-url="http://www.weymire.com/2016/11/27/essay3/"
+                     data-images="http://www.weymire.com/2016/11/27/essay3/essay3.jpg"
+                     data-content="本文同时也发表在我的知乎专栏上😄. 不过当时写作的风格实在不适合技术文, 因此在个人博客中的... | Weymire&#39;s Blog ">
+                    <div class="ds-share-inline">
+                        <ul class="ds-share-icons-16">
+                            <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                            <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                            <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                            <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        </ul>
+                        <div class="ds-share-icons-more">
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2016/12/04/essay2/" data-toggle="tooltip" data-placement="top"
+                           title="Vertical Fog及在Fragment Shader中重建世界坐标">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                         data-thread-key="2016/11/27/essay3/"
+                         data-title="相交高亮(扫描效果)"
+                         data-url="http://www.weymire.com/2016/11/27/essay3/">
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">相交高亮(Intersection Highlight)是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">相交高亮着色器工作原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">猜一猜实现的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">如何优雅地求坐标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">如何获取一个片元所在屏幕坐标的DepthBuffer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">"乘以0.5然后加上w分量的二分之一"到底是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">点元着色器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">非常简单的片元着色器函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">最终效果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">后记</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Unity"
+                           title="Unity">Unity</a>
+                        
+                        <a class="tag" href="/tags/#Computer Graphics"
+                           title="Computer Graphics">Computer Graphics</a>
+                        
+                        <a class="tag" href="/tags/#Shader"
+                           title="Shader">Shader</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'yujingping';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user};
+    (function () {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';
+        ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/ehazon">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/yu-jing-ping-64">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/haojen">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/AlphaMistral">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Weymire 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.weymire.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91741512-1';
+    var _gaDomain = 'auto';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = 'a7bea2767d4659bf7b7a4f62100a2a13';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="image/avatar.jpg"><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>
