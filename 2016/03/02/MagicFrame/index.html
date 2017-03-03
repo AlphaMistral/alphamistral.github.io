@@ -209,15 +209,14 @@
 <p>Magic Frame is featured in the following aspects:</p>
 <blockquote>
 <ul>
-<li>a) Creatively use gravity sensor and compass inside smart phones to control the player’s visual angle instead of the traditional solution in which the player has to use his or her right hand to rotate around the screen. Our inspiration comes from
-StarWalk, an astronomy introduction software available on smart phones, in which users can aim their mobile phones at a specific part of the sky and the software displays the corresponding information based on the rotation angle and the facing direction of the mobile device.</li>
+<li>a) Creatively use gravity sensor and compass inside smart phones to control the player’s visual angle instead of the traditional solution in which the player has to use his or her right hand to rotate around the screen. Our inspiration comes from StarWalk, an astronomy introduction software available on smart phones, in which users can aim their mobile phones at a specific part of the sky and the software displays the corresponding information based on the rotation angle and the facing direction of the mobile device.</li>
 <li>b) Utilize various textures, normal maps and materials to reach the standard of a next-generation mobile game. Meanwhile the use of particle effects, physical engine and dynamic lighting makes the scenes elegant and real.</li>
 <li>c) Available on smart phones and supports WP, Android and iOS systems. Supports operators with x86 and ARM architectures.</li>
 <li>d) The game is greatly optimized so that even lower-hardware devices could run our game perfectly. The game could run a Xiaomi 1S and iPhone 5 without any pressure.</li>
-<li>e) Raise a concern about artificial-intelligence. Our game is about AI and the gaming process and ending bethinks the players about the risk of artificial- intelligence.
-Generally speaking, Magic Frame is a multi-platform 3D puzzle game with innovative operating interface, high quality 3D models, physics systems and a concern of the development of artificial intelligence. The unique operating method also help the player to experience naturally inside the fabricated world.</li>
+<li>e) Raise a concern about artificial-intelligence. Our game is about AI and the gaming process and ending bethinks the players about the risk of artificial- intelligence.</li>
 </ul>
 </blockquote>
+<p>Generally speaking, Magic Frame is a multi-platform 3D puzzle game with innovative operating interface, high quality 3D models, physics systems and a concern of the development of artificial intelligence. The unique operating method also help the player to experience naturally inside the fabricated world.</p>
 <h2>Core Play</h2>
 <p>The visual angle is controlled by the rotation and position of the player’s mobile phone. If the player rotates his mobile phone by a certain angle upwards, the camera inside the game would also rotate by the corresponding angle upwards. Hence, the player controls his mobile device naturally during his or her whole game experience. The essential core play of Magic Frame is taking photographs. The player interact with the fabricated world by taking various photographs. For example, if the player takes a picture of an item such as a lighter, he will get the lighter and put it into his backpack. The camera that the player holds could also by implemented with other items to be more functional. For example, if the player puts the lighter into the camera and takes a photo of a candle, then the candle would be lit. As demonstrated, the camera is the media between the player and the game world inside the game, and the unique operating way is the connection between the player and the game in the real world.</p>
 <p>When it comes to interactions with NPCs, the player is to take photographs based on NPC’s requirements to make them willing to talk with him. The requirements include but not limited to positions, angles and items. The player has to take a photo to a correct item at a correct position with a correct angle to be accepted. For example if an NPC requires the player to take a photo of a splashing fountain, the player has to add more water into the fountain first, and them power on the fountain and move to the right position to take the photo. Such a system increases the interactions between the player and the game.</p>
@@ -235,22 +234,27 @@ Generally speaking, Magic Frame is a multi-platform 3D puzzle game with innovati
 </ul>
 </blockquote>
 <h2>Graphics</h2>
-<p>All the models except the packages stated at the end of this document are created, constructed and ameliorated by our two 3D artists. The sense of beauty is greatly emphasized in Magic Frame, which is directly exemplified in the game.
-Mistral also takes care of efficiency and execution. In order to reduce the expenses of hardware, we have optimized Magic Frame in many different aspects. When it comes to models, we utilized low-poly models to decrease the amount of triangles and vertices. We also integrated all the textures into 3 main atlases, which means the GPU could finish rendering all the models by calling the atlases only third times. Hence the efficiency is enormously increased.
-When it comes to lighting and shadows, Mistral applies LightMapping to pre- bake the static objects in the scene and save the alterations caused by the lights into lightmaps, which means the GPU no longer needs to calculate these things each
+<p>All the models except the packages stated at the end of this document are created, constructed and ameliorated by our two 3D artists. The sense of beauty is greatly emphasized in Magic Frame, which is directly exemplified in the game.</p>
+<p>Mistral also takes care of efficiency and execution. In order to reduce the expenses of hardware, we have optimized Magic Frame in many different aspects. When it comes to models, we utilized low-poly models to decrease the amount of triangles and vertices. We also integrated all the textures into 3 main atlases, which means the GPU could finish rendering all the models by calling the atlases only third times. Hence the efficiency is enormously increased.</p>
+<p>When it comes to lighting and shadows, Mistral applies LightMapping to pre- bake the static objects in the scene and save the alterations caused by the lights into lightmaps, which means the GPU no longer needs to calculate these things each
 frame. However, in order to minimize the negative influences caused by the optimization, the dynamic objects are quite different. When they are visible to the player, they will be rendered each frame to make sure that they look more natural and real. Also in order to make them look more elegant, they are rendered in real- time mode, which means the lighting and shadows cast upon them change each frame.</p>
+<p><img src="/image/MagicFrame/1.png" alt=""></p>
 <h2>Systems</h2>
 <p>Our game is never a demo. It is a complete game! All the necessary systems are provided in Magic Frame. All the systems are to be elaborated on as follows:</p>
-<blockquote>
 <ul>
-<li>a) Tutorial System. Although the operations in Magic Frame are simple and self-explanative, the tutorial system is provided to make sure that the player can understand the operations thoroughly.</li>
-<li>b) Conversation System. The player could talk to the NPCs in the game.</li>
-<li>c) Quest System. The player could see his objectives, quests and achievements here.</li>
-<li>d) Reminder System. All the important reminders all here. The play could analyze the information here to find more clues.</li>
-<li>e) Gallery System. All the photos taken are displayed here. The player could determine which one to be saved into the system or which one to be deleted from the game.</li>
-<li>f) Item System. The player could check his backpack and determine which item to equip.</li>
+<li>a) Tutorial System. Although the operations in Magic Frame are simple and self-explanative, the tutorial system is provided to make sure that the player can understand the operations thoroughly.
+<img src="/image/MagicFrame/2.png" alt=""></li>
+<li>b) Conversation System. The player could talk to the NPCs in the game.
+<img src="/image/MagicFrame/3.png" alt=""></li>
+<li>c) Quest System. The player could see his objectives, quests and achievements here.
+<img src="/image/MagicFrame/4.png" alt=""></li>
+<li>d) Reminder System. All the important reminders all here. The play could analyze the information here to find more clues.
+<img src="/image/MagicFrame/5.png" alt=""></li>
+<li>e) Gallery System. All the photos taken are displayed here. The player could determine which one to be saved into the system or which one to be deleted from the game.
+<img src="/image/MagicFrame/6.png" alt=""></li>
+<li>f) Item System. The player could check his backpack and determine which item to equip.
+<img src="/image/MagicFrame/7.png" alt=""></li>
 </ul>
-</blockquote>
 
                 <hr>
                 
