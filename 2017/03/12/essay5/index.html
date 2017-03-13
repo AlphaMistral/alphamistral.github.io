@@ -192,10 +192,10 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>本文同时也发表在我的<a href="https://zhuanlan.zhihu.com/p/25038820?refer=MeowShader" target="_blank" rel="external">知乎专栏 - 大萌喵的Shader相册</a>上😄.</p>
+                <p>本文同时也发表在我的<a href="https://zhuanlan.zhihu.com/p/25725870" target="_blank" rel="external">知乎专栏 - 大萌喵的Shader相册</a>上😄.</p>
 <blockquote>
 <p>作者：音速键盘猫</p>
-<p>链接：https://zhuanlan.zhihu.com/p/25038820</p>
+<p>链接：https://zhuanlan.zhihu.com/p/25725870</p>
 <p>来源：知乎</p>
 <p>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
 </blockquote>
@@ -224,40 +224,40 @@
 <li>Fresnel(菲尼尔)方法 - 非常类似于Rim Lighting, 使用视线方向和点法线方向的点积来判断边缘, 并将边缘高亮化.</li>
 </ul>
 <blockquote>
-<p>优点: 效率高; 不需要单独的Pass就可以实现; 几乎所有的平滑的边缘都会得到高亮效果; 甚至对透明和半透明物体也有效.
-缺点: 无法控制Inking线条的粗细, 这是因为Fresnel方法是针对于模型法线和摄像机视线的, 从而导致其仅与每个表面的法线方向有关, 而与表面的深度信息无关.</p>
+<p>优点: 效率高; 不需要单独的Pass就可以实现; 几乎所有的平滑的边缘都会得到高亮效果; 甚至对透明和半透明物体也有效.</p>
+<p>缺点: 无法控制Inking线条的粗细, 这是因为Fresnel方法是针对于模型法线和摄像机视线的, 从而导致其仅与每个表面的法线方向有关, 而与表面的深度信息无关.</p>
 </blockquote>
 <p><img src="/image/essay5/3.jpg" alt=""></p>
 <ul>
 <li>Mesh Doubling (复制网格) - 非常类似于卡通Toon特效. 需要一个单独的Pass来实现. 重新绘制一个将所有表面都沿着法线方向延展过的模型, 然后将正面剪裁掉. <strong>这也是我采用的方案</strong></li>
 </ul>
 <blockquote>
-<p>优点: 效率高; 平台适应性好; 可以控制Inking的线条粗细.
-缺点: 线条并不连续, 在平滑表面的表现虽然很好, 但是在锐利的表面上经常会出现断层; 只能绘制最外层轮廓, 而不对内部结构做任何处理.</p>
+<p>优点: 效率高; 平台适应性好; 可以控制Inking的线条粗细.</p>
+<p>缺点: 线条并不连续, 在平滑表面的表现虽然很好, 但是在锐利的表面上经常会出现断层; 只能绘制最外层轮廓, 而不对内部结构做任何处理.</p>
 </blockquote>
 <p><img src="/image/essay5/4.png" alt=""></p>
 <ul>
 <li>Edge Detection (边缘检测) - Unity自带的屏幕后期处理特效[2]. 使用Sobel Filter[3]进行描边的算法, 其基本原理是检测多个相邻的像素的深度差值, 使用一个3x3的采样块来对原图求卷积, 将深度信息差值比较大的部分过滤出来. LOL中的Inking使用的就是这个方法.</li>
 </ul>
 <blockquote>
-<p>优点: 既可以用作屏幕后期特效, 又可以作为模型特效; 描边准确; 线条粗细可控.
-缺点: 比上述两种方案都要昂贵得多, 但是其性能开销恒定, 与被处理的图像没有任何关系;</p>
+<p>优点: 既可以用作屏幕后期特效, 又可以作为模型特效; 描边准确; 线条粗细可控.</p>
+<p>缺点: 比上述两种方案都要昂贵得多, 但是其性能开销恒定, 与被处理的图像没有任何关系;</p>
 </blockquote>
 <p><img src="/image/essay5/6.jpg" alt=""></p>
 <ul>
 <li>使用几何着色器 - 检验临近的多边形以确定邻边和夹角, 再单独构建轮廓的几何体.</li>
 </ul>
 <blockquote>
-<p>优点: 目前为止最为精确的做法; 很容易控制线条的粗细.
-缺点: 建议买一台给力点的工作站或服务器; 一般只能用于离线渲染;</p>
+<p>优点: 目前为止最为精确的做法; 很容易控制线条的粗细.</p>
+<p>缺点: 建议买一台给力点的工作站或服务器; 一般只能用于离线渲染;</p>
 </blockquote>
 <h4>具体实现策略</h4>
 <p>采用了Mesh Doubling (复制网格)的方法. 这里必须要解决的问题是<strong>线条的不连续性</strong>. 其思路是<strong>不严格地将表面沿着法线方向延展, 而是在标准化的点元位置和法线方向之间取一个恰当的参数来做插值</strong>, 这样做的好处是表面在延展的过程中也会尽量向点元方向靠拢, 尽量地减少了新网格的<strong>撕裂感</strong>.</p>
 <p>$$
-P_{new} = P_{old} + L \times W_(outline) / D_{cam}
+P_{new} = P_{old} + L \times W_{outline} / D_{cam}
 $$</p>
 <p>$$
-L = Normalize(M_{IT_MV} \times lerp(V, N, f))
+L = Normalize(MV_{IT} \times lerp(V, N, f))
 $$</p>
 <p>其中, L表示偏移向量; W表示轮廓线条粗细; D是物体和摄像机间的距离. V是标准化后的顶点坐标, 表示方向; N是顶点向量; f是插值参数.</p>
 <p><img src="/image/essay5/5.png" alt=""></p>
@@ -305,7 +305,7 @@ C = \alpha * (S_{edge} + S_{surf}) * (C_{normal} + C_{hologram})
 $$</p>
 <p>得到的结果如下:</p>
 <p><img src="/image/essay5/13.gif" alt=""></p>
-<p>着色器如下:
+<p>着色器代码如下:
 <figure class="highlight"><table><tr><td class="code"><pre><div class="line"></div><div class="line">  v2f vert ( appdata_base v )</div><div class="line">    &#123;</div><div class="line">        v2f o;</div><div class="line"></div><div class="line">        o.pos = UnityObjectToClipPos ( v.vertex );</div><div class="line"></div><div class="line">        o.projPos = ComputeScreenPos ( o.pos );</div><div class="line"></div><div class="line">        o.uv = v.texcoord.xy;</div><div class="line"></div><div class="line">        o.normalDir = UnityObjectToWorldNormal ( v.normal );</div><div class="line"></div><div class="line">        o.posWorld = mul ( UNITY_MATRIX_M, v.vertex );</div><div class="line"></div><div class="line">        return o;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    fixed4 frag ( v2f i ) : COLOR</div><div class="line">    &#123;</div><div class="line">        fixed alpha = 1;</div><div class="line">        float sceneZ = LinearEyeDepth ( SAMPLE_DEPTH_TEXTURE_PROJ ( _CameraDepthTexture, UNITY_PROJ_COORD ( i.projPos ) ) );</div><div class="line">        float partZ = i.projPos.z;</div><div class="line">        float fade = saturate ( _InvFade * ( sceneZ - partZ ) );</div><div class="line">        alpha *= fade;</div><div class="line">                </div><div class="line">        float3 viewDirection = normalize ( _WorldSpaceCameraPos.xyz - i.posWorld.xyz );                </div><div class="line">                 </div><div class="line">        float4 objectOrigin = mul ( unity_ObjectToWorld, float4 ( 0.0, 0.0, 0.0, 1.0 ) );</div><div class="line"></div><div class="line">        float dist = distance ( _WorldSpaceCameraPos.xyz, objectOrigin.xyz );</div><div class="line"></div><div class="line">        float2 wcoord = i.projPos.xy / i.projPos.w;</div><div class="line">wcoord.x *= _Inter.y;</div><div class="line">        wcoord.y *= _Inter.z;</div><div class="line">        wcoord *= dist * _Inter.x;</div><div class="line">        </div><div class="line">        float3 nMask = _Strength;</div><div class="line">                 </div><div class="line">        float3 hMask = tex2D( _MainTex, wcoord + float2 ( 0, _Time.x * _Inter.w ) );</div><div class="line"></div><div class="line">        float fresnel = pow ( abs ( dot ( viewDirection, i.normalDir ) ), _FresPow ) * _FresMult;</div><div class="line">        float3 bLayer = lerp ( _bLayerColorA, _bLayerColorB, fresnel );</div><div class="line"></div><div class="line">        float fresnelOut = pow ( 1 - abs ( dot ( viewDirection, i.normalDir ) ), _FresPowOut ) * _FresMultOut;</div><div class="line">        float3 bLayerC = _bLayerColorC * fresnelOut;</div><div class="line"></div><div class="line">        float3 final = saturate ( ( hMask + nMask ) * ( bLayer + bLayerC ) ) * alpha;</div><div class="line">            </div><div class="line">        return float4 ( final * _Fade, 1) ;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
 <h2>See - Through(透视特效)</h2>
 <h4>何为透视特效</h4>
