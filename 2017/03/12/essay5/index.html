@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="null">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="Weymire" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        游戏特效第五期 - 几种科幻风格的着色器特效｜Weymire&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.weymire.com/2017/03/12/essay5/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('../image/tags.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Weymire
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/Portfolio/">Portfolio</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">Featured Tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://ol56no7p4.bkt.clouddn.com/essay5.png">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://ol56no7p4.bkt.clouddn.com/essay5.png?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>游戏特效第五期 - 几种科幻风格的着色器特效</h1>
+                    
+                    <h2 class="subheading">Hacker F-301中的特效实现方案分享</h2>
+                    
+                    <span class="meta">
+                         作者 Jingping Yu
+                        <span>
+                          日期 2017-03-12
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Unity"
+                           title="Unity">Unity</a>
+                        
+                        <a class="tag" href="/tags/#Computer Graphics"
+                           title="Computer Graphics">Computer Graphics</a>
+                        
+                        <a class="tag" href="/tags/#Shader"
+                           title="Shader">Shader</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            游戏特效第五期 - 几种科幻风格的着色器特效
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>本文同时也发表在我的<a href="https://zhuanlan.zhihu.com/p/25038820?refer=MeowShader" target="_blank" rel="external">知乎专栏 - 大萌喵的Shader相册</a>上😄.</p>
+<blockquote>
+<p>作者：音速键盘猫</p>
+<p>链接：https://zhuanlan.zhihu.com/p/25038820</p>
+<p>来源：知乎</p>
+<p>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+<h2>写在前面</h2>
+<p>最近闲来无事, 因此给自己开了个新坑 - 为一款科幻风格的塔防游戏Hacker F-301(骇客F-301)编写着色器特效. 在这个过程中有了一些心得体会, 因此打算写出来分享. 希望大家多提宝贵意见, 不吝斧正.</p>
+<h2>Topics</h2>
+<p>本文将介绍如下几种特效:</p>
+<blockquote>
+<ol>
+<li>Inking (模型描边)</li>
+<li>Hologram (模型的全息图)</li>
+<li>See - Through (渲染出物体被遮挡的部分, 类似于穿墙透视效果 - 屏幕后期特效)</li>
+<li>Force Field (力场护盾效果)</li>
+<li>Video Glitch (模拟LCD显示屏受到电子干扰的效果 - 屏幕后期特效)</li>
+</ol>
+</blockquote>
+<h2>Inking (模型描边, Outline)</h2>
+<h4>何为Inking</h4>
+<p>Inking是附加在<strong>蒙皮网格</strong>上的模型特效, 它用比较<strong>细</strong>的<strong>灰黑色</strong>的线条<strong>勾勒出网格的轮廓</strong>. 这样做的好处是能够从背景更加<strong>清晰</strong>地勾画出这个网格, 尤其是在对比度比较低的区域中. Inking特效的应用场景特别多, 大家耳熟能详的LOL中就出现了它的踪影:</p>
+<p><img src="/image/essay5/1.jpg" alt="">
+<img src="/image/essay5/2.jpg" alt=""></p>
+<p>上面的两张图来源于一篇对LOL渲染流程分析的博客[1]. 第一张图中是原图, 而第二张图是加入Inking特效后的结果. 我们看到, 加入Inking后, 所有的模型能够更容易地从背景中区分出来, 起到了<strong>Bump Up</strong>的作用. 这个例子中使用了比较粗的Inking线条, 这样也增添了一分<strong>漫画风格</strong>的质感.</p>
+<h4>Inking的实现方法(综述)</h4>
+<p>Inking的实现方法有很多种, 大体上可以分为操作点元和操作片元两大类. 视具体情况决定使用哪一种Inking:</p>
+<ul>
+<li>Fresnel(菲尼尔)方法 - 非常类似于Rim Lighting, 使用视线方向和点法线方向的点积来判断边缘, 并将边缘高亮化.</li>
+</ul>
+<blockquote>
+<p>优点: 效率高; 不需要单独的Pass就可以实现; 几乎所有的平滑的边缘都会得到高亮效果; 甚至对透明和半透明物体也有效.
+缺点: 无法控制Inking线条的粗细, 这是因为Fresnel方法是针对于模型法线和摄像机视线的, 从而导致其仅与每个表面的法线方向有关, 而与表面的深度信息无关.</p>
+</blockquote>
+<p><img src="/image/essay5/3.jpg" alt=""></p>
+<ul>
+<li>Mesh Doubling (复制网格) - 非常类似于卡通Toon特效. 需要一个单独的Pass来实现. 重新绘制一个将所有表面都沿着法线方向延展过的模型, 然后将正面剪裁掉. <strong>这也是我采用的方案</strong></li>
+</ul>
+<blockquote>
+<p>优点: 效率高; 平台适应性好; 可以控制Inking的线条粗细.
+缺点: 线条并不连续, 在平滑表面的表现虽然很好, 但是在锐利的表面上经常会出现断层; 只能绘制最外层轮廓, 而不对内部结构做任何处理.</p>
+</blockquote>
+<p><img src="/image/essay5/4.png" alt=""></p>
+<ul>
+<li>Edge Detection (边缘检测) - Unity自带的屏幕后期处理特效[2]. 使用Sobel Filter[3]进行描边的算法, 其基本原理是检测多个相邻的像素的深度差值, 使用一个3x3的采样块来对原图求卷积, 将深度信息差值比较大的部分过滤出来. LOL中的Inking使用的就是这个方法.</li>
+</ul>
+<blockquote>
+<p>优点: 既可以用作屏幕后期特效, 又可以作为模型特效; 描边准确; 线条粗细可控.
+缺点: 比上述两种方案都要昂贵得多, 但是其性能开销恒定, 与被处理的图像没有任何关系;</p>
+</blockquote>
+<p><img src="/image/essay5/6.jpg" alt=""></p>
+<ul>
+<li>使用几何着色器 - 检验临近的多边形以确定邻边和夹角, 再单独构建轮廓的几何体.</li>
+</ul>
+<blockquote>
+<p>优点: 目前为止最为精确的做法; 很容易控制线条的粗细.
+缺点: 建议买一台给力点的工作站或服务器; 一般只能用于离线渲染;</p>
+</blockquote>
+<h4>具体实现策略</h4>
+<p>采用了Mesh Doubling (复制网格)的方法. 这里必须要解决的问题是<strong>线条的不连续性</strong>. 其思路是<strong>不严格地将表面沿着法线方向延展, 而是在标准化的点元位置和法线方向之间取一个恰当的参数来做插值</strong>, 这样做的好处是表面在延展的过程中也会尽量向点元方向靠拢, 尽量地减少了新网格的<strong>撕裂感</strong>.</p>
+<p>$$
+P_{new} = P_{old} + L \times W_(outline) / D_{cam}
+$$</p>
+<p>$$
+L = Normalize(M_{IT_MV} \times lerp(V, N, f))
+$$</p>
+<p>其中, L表示偏移向量; W表示轮廓线条粗细; D是物体和摄像机间的距离. V是标准化后的顶点坐标, 表示方向; N是顶点向量; f是插值参数.</p>
+<p><img src="/image/essay5/5.png" alt=""></p>
+<p>上图更加清晰地阐述了<strong>撕裂</strong>和<strong>不连续</strong>的情况. 如果不进行插值, 那么这种方法可以适用于球形等表面变化均匀且光滑的几何体, 但是对于立方体则无能为力.</p>
+<p><img src="/image/essay5/7.png" alt=""></p>
+<p>上图中的立方体的延展向量使用了参数0.032作为插值, 撕裂感便不复存在了.</p>
+<p>这里给出Inking特效的核心程序代码(非常简短), 同时附上部分Implementation Notes:</p>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><div class="line"><span class="function">vertexOutput <span class="title">vert</span> <span class="params">( appdata_base v )</span></span></div><div class="line">&#123;</div><div class="line">		vertexOutput o;</div><div class="line">          </div><div class="line">		o.pos = mul ( UNITY_MATRIX_MVP, v.vertex );</div><div class="line">		float3 dir = normalize ( v.vertex.xyz );</div><div class="line">		float3 dir2 = v.normal;</div><div class="line">		</div><div class="line">		dir = lerp ( dir, dir2, _Factor );</div><div class="line"></div><div class="line">		dir = mul ( ( float3x3 ) UNITY_MATRIX_IT_MV, dir );</div><div class="line">		float2 offset = TransformViewToProjection ( dir.xy );</div><div class="line">		offset = normalize ( offset );</div><div class="line">		<span class="keyword">float</span> dist = distance ( mul ( UNITY_MATRIX_M, v.vertex ), _WorldSpaceCameraPos );</div><div class="line">		o.pos.xy += offset * o.pos.z * _OutlineWidth / dist;</div><div class="line"> </div><div class="line">		<span class="keyword">return</span> o;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>_Factor即为插值参数. 变换法向量要注意使用Model View矩阵的<strong>转置逆矩阵</strong>. 为了保证最终的线条粗细维持世界坐标上的恒定, 而不随摄像机的移动发生改变, 因此延展的像素位置要除以摄像机距离. 最终片元着色器函数只需要一句<strong>return _Color;<strong>即可. 最后必须注意</strong>剪裁掉正面</strong>, 否则绘制出的不会是轮廓, 而是将模型包裹起来的保鲜膜😩 ...</p>
+<p><img src="/image/essay5/9.png" alt=""></p>
+<p><img src="/image/essay5/8.png" alt=""></p>
+<p>上面两张图是加入特效的前后对比. 我们看到使用Inking后炮塔能够更加&quot;犀利&quot;地从背景中呈现出来.</p>
+<p>一定程度上, <strong>Inking有点类似于SSAO</strong>. 两者都是尝试在几何体的交界处加入更深层次的阴影以让画面更有对比度. 关于SSAO我的<a href="https://zhuanlan.zhihu.com/p/25038820?refer=MeowShader" target="_blank" rel="external">知乎专栏第四篇</a>有过介绍.</p>
+<h2>Hologram (模型的全息图)</h2>
+<h4>何为Hologram</h4>
+<p>全息图是一般以激光为光源, 将被摄物体记录为3D光场(Light Field)所构成的三维图像. 一般以干涉条纹的形式存在.</p>
+<p><img src="/image/essay5/10.jpg" alt=""></p>
+<p><img src="/image/essay5/11.jpg" alt=""></p>
+<p>上图中第一张图是全息投影仪的概念效果, 第二张图是质量效应(Mass Effect)中的特效.</p>
+<p>Hologram一般可以用作<strong>单位建造的预览效果</strong>和<strong>呈现结构的效果</strong>.</p>
+<p><img src="/image/essay5/17.jpg" alt=""></p>
+<p><img src="/image/essay5/18.jpg" alt=""></p>
+<h4>第一次尝试(Naive 方法)</h4>
+<p>计算模型的每个片元的屏幕坐标, 然后对一个条纹状纹理采样即可. 为了防止单一的条纹过于无聊, 同时还引入了一个Noise Map来进行干扰. 代码如下:</p>
+<p><figure class="highlight"><table><tr><td class="code"><pre><div class="line"></div><div class="line">v2f vert ( appdata_base v )</div><div class="line">&#123;</div><div class="line">    v2f o;</div><div class="line"></div><div class="line">    o.pos = UnityObjectToClipPos ( v.vertex );</div><div class="line"></div><div class="line">    o.uv = v.texcoord.xy;</div><div class="line"></div><div class="line">    o.screenPos = ComputeScreenPos ( o.pos );</div><div class="line"></div><div class="line">    o.dist = distance ( mul ( UNITY_MATRIX_M, float4 ( 0.0, 0.0, 0.0, 0.0 ) ), _WorldSpaceCameraPos );</div><div class="line"></div><div class="line">    return o;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">fixed4 frag ( v2f i ) : COLOR</div><div class="line">&#123;</div><div class="line">    fixed4 finalColor;</div><div class="line"></div><div class="line">    float2 uvNormal = UnpackNormal ( tex2D ( _NormalTex, i.uv ) ) / i.dist;</div><div class="line"></div><div class="line">    float2 screenUV = ( i.screenPos.xy / i.screenPos.w + float2 ( _TilingX * _Time.y, _TilingY * _Time.y ) ) * i.dist * _Distance;</div><div class="line"></div><div class="line">    fixed3 color = _Color * tex2D ( _MainTex, screenUV + uvNormal ) * _Emission;</div><div class="line"></div><div class="line">    fixed alpha = _Color.a * max ( min ( color.r, color.g ), color.b );</div><div class="line"></div><div class="line">    return fixed4 ( color, alpha );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>得到的结果自然也是Naive的😅 :</p>
+<p><img src="/image/essay5/12.gif" alt=""></p>
+<p>对比上面的两张效果图, 我们发现一个问题: 虽然当前的这个Hologram特效能够显示出干涉条纹, 但是整个物体的深度和法线信息全部丢失, 给人以一种乱糟糟的线条感.</p>
+<h4>第二次尝试(将深度和法线信息纳入考量)</h4>
+<p>仔细观察前面的两张效果图, 我们看到dot(viewDirection, normalDirection)(以下简称为点积)越大则越昏暗. 为了让整个特效更加有层次感, 我选择的方案是分别计算点积大的区域和点积小的区域来的颜色信息. 同时我更新了对干涉条纹的计算方法: 为了防止整个全息图特效的颜色过淡, 先给予一个统一的强度_Strength, 然后再加上对干涉条纹的采样值.</p>
+<p>$$
+\alpha = F_{soft} \times (Z_{scene} - Z_{object})
+$$</p>
+<p>$$
+S_{edge} = (1 - abs(N \cdot V)) ^ {I_{edge}} \times M_{edge}
+$$</p>
+<p>$$
+S_{surf} = (abs(N \cdot V)) ^ {I_{surf}} \times M_{surf}
+$$</p>
+<p>$$
+C_{hologram} = tex(T_{main}, wcoord + UV_{time})
+$$</p>
+<p>$$
+C = \alpha * (S_{edge} + S_{surf}) * (C_{normal} + C_{hologram})
+$$</p>
+<p>得到的结果如下:</p>
+<p><img src="/image/essay5/13.gif" alt=""></p>
+<p>着色器如下:
+<figure class="highlight"><table><tr><td class="code"><pre><div class="line"></div><div class="line">  v2f vert ( appdata_base v )</div><div class="line">    &#123;</div><div class="line">        v2f o;</div><div class="line"></div><div class="line">        o.pos = UnityObjectToClipPos ( v.vertex );</div><div class="line"></div><div class="line">        o.projPos = ComputeScreenPos ( o.pos );</div><div class="line"></div><div class="line">        o.uv = v.texcoord.xy;</div><div class="line"></div><div class="line">        o.normalDir = UnityObjectToWorldNormal ( v.normal );</div><div class="line"></div><div class="line">        o.posWorld = mul ( UNITY_MATRIX_M, v.vertex );</div><div class="line"></div><div class="line">        return o;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    fixed4 frag ( v2f i ) : COLOR</div><div class="line">    &#123;</div><div class="line">        fixed alpha = 1;</div><div class="line">        float sceneZ = LinearEyeDepth ( SAMPLE_DEPTH_TEXTURE_PROJ ( _CameraDepthTexture, UNITY_PROJ_COORD ( i.projPos ) ) );</div><div class="line">        float partZ = i.projPos.z;</div><div class="line">        float fade = saturate ( _InvFade * ( sceneZ - partZ ) );</div><div class="line">        alpha *= fade;</div><div class="line">                </div><div class="line">        float3 viewDirection = normalize ( _WorldSpaceCameraPos.xyz - i.posWorld.xyz );                </div><div class="line">                 </div><div class="line">        float4 objectOrigin = mul ( unity_ObjectToWorld, float4 ( 0.0, 0.0, 0.0, 1.0 ) );</div><div class="line"></div><div class="line">        float dist = distance ( _WorldSpaceCameraPos.xyz, objectOrigin.xyz );</div><div class="line"></div><div class="line">        float2 wcoord = i.projPos.xy / i.projPos.w;</div><div class="line">wcoord.x *= _Inter.y;</div><div class="line">        wcoord.y *= _Inter.z;</div><div class="line">        wcoord *= dist * _Inter.x;</div><div class="line">        </div><div class="line">        float3 nMask = _Strength;</div><div class="line">                 </div><div class="line">        float3 hMask = tex2D( _MainTex, wcoord + float2 ( 0, _Time.x * _Inter.w ) );</div><div class="line"></div><div class="line">        float fresnel = pow ( abs ( dot ( viewDirection, i.normalDir ) ), _FresPow ) * _FresMult;</div><div class="line">        float3 bLayer = lerp ( _bLayerColorA, _bLayerColorB, fresnel );</div><div class="line"></div><div class="line">        float fresnelOut = pow ( 1 - abs ( dot ( viewDirection, i.normalDir ) ), _FresPowOut ) * _FresMultOut;</div><div class="line">        float3 bLayerC = _bLayerColorC * fresnelOut;</div><div class="line"></div><div class="line">        float3 final = saturate ( ( hMask + nMask ) * ( bLayer + bLayerC ) ) * alpha;</div><div class="line">            </div><div class="line">        return float4 ( final * _Fade, 1) ;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<h2>See - Through(透视特效)</h2>
+<h4>何为透视特效</h4>
+<p><img src="/image/essay5/14.jpg" alt=""></p>
+<p>游戏中总有一些<strong>非常重要的物体</strong>, 需要确保玩家在任何时候都能以某种方式看到. 比如Hitman系列中玩家可以使用这种透视的方式来知道敌人的位置以确定自己的战术. 而RTS类游戏(比如红色警戒3)中被遮挡的单位也会以另一种颜色被渲染出来, 防止玩家不知道其存在.</p>
+<h4>如何实现透视特效</h4>
+<p>将游戏物体分为两层: Occluder(遮挡)层和Behind(后面)层. 特效要实现的目标是将Behind层被Occluder层遮挡的部分渲染出来. 这里使用两个摄像机, 分别渲染两个层的深度信息, 得到两张Render Target(以下简称RT). 将所有Behind RT深度大于对应Occluder RT深度的部分以另一种方式渲染出来, 而不对其余部分做任何处理, 并将结果放到一个新的RT中. 最终画一个全屏幕的Quad, 将这个RT直接Apply即可.</p>
+<p>为了增加渲染结果的层次感并反应被遮挡物体的结构, 渲染Behind层的摄像机可以同时渲染法线信息, 然后在渲染最终RT的时候将颜色强度与法线方向挂钩即可.</p>
+<p>以下是渲染结果:</p>
+<p><img src="/image/essay5/15.gif" alt=""></p>
+<p>如何让Rendering Path为Forward的摄像机得到场景的深度和法线信息呢? 使用单独的着色器规定其渲染行为, 然后使用Camera.RenderWithShader即可.</p>
+<p>规定摄像机渲染方式的着色器:</p>
+<p><figure class="highlight"><table><tr><td class="code"><pre><div class="line"></div><div class="line">struct v2f </div><div class="line">&#123;</div><div class="line">	float4 pos : POSITION;</div><div class="line">	float4 nz : TEXCOORD0;</div><div class="line">&#125;;</div><div class="line">            </div><div class="line">v2f vert( appdata_base v )</div><div class="line">&#123;</div><div class="line">	v2f o;</div><div class="line"></div><div class="line">	o.pos = mul( UNITY_MATRIX_MVP, v.vertex );</div><div class="line"></div><div class="line">	o.nz.xyz = COMPUTE_VIEW_NORMAL;</div><div class="line">	o.nz.w = COMPUTE_DEPTH_01;</div><div class="line"></div><div class="line">	return o;</div><div class="line">&#125;</div><div class="line">            </div><div class="line">fixed4 frag( v2f i ) : COLOR </div><div class="line">&#123;</div><div class="line">	return EncodeDepthNormal ( i.nz.w, i.nz.xyz );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>处理两张RT的着色器:</p>
+<p><figure class="highlight"><table><tr><td class="code"><pre><div class="line"></div><div class="line">v2f vert ( appdata_img v )</div><div class="line">&#123;</div><div class="line">	v2f o;</div><div class="line"></div><div class="line">	o.pos = UnityObjectToClipPos ( v.vertex );</div><div class="line"></div><div class="line">	o.uv = v.texcoord.xy;</div><div class="line"></div><div class="line">	return o;</div><div class="line">&#125;</div><div class="line"></div><div class="line">fixed4 frag ( v2f i ) : COLOR</div><div class="line">&#123;</div><div class="line">	float behindDepth, occluderDepth;</div><div class="line">	float3 behindNormal, occluderNormal;</div><div class="line"></div><div class="line">	DecodeDepthNormal ( tex2D ( _Behind, i.uv ), behindDepth, behindNormal );</div><div class="line">	DecodeDepthNormal ( tex2D ( _Occluder, i.uv ), occluderDepth, occluderNormal );</div><div class="line"></div><div class="line">	fixed4 scene = tex2D ( _MainTex, i.uv );</div><div class="line">	fixed4 pattern = tex2D ( _PatternTex, ( i.uv + _SinTime.w / 100 ) / _PatternScale );</div><div class="line"></div><div class="line">	if (behindDepth &gt; 0 &amp;&amp; occluderDepth &gt; 0 &amp;&amp; behindDepth &gt; occluderDepth)</div><div class="line">	&#123;</div><div class="line">		float factor = 0.1 + 0.9 * pow ( max ( dot ( float3 ( 0, 0, 1 ), behindNormal ), 0.0 ), 1.2 );</div><div class="line">		return fixed4 ( lerp ( scene, _Color, lerp ( factor, factor * pattern.r, _PatternWeight ) ) );</div><div class="line">	&#125;</div><div class="line"> 	else</div><div class="line">		return scene;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4>一个小问题</h4>
+<p>这个实现的方式开销有点大: 对于每一组Occluder层和Behind层, 都需要用两个摄像机单独渲染一次(虽然只需要深度和法线, 不需要计算光照), 然后做一次全屏幕的后期特效. 那么对于像红色警戒3这样的游戏, 总共有6个阵营的单位, 而每个阵营的单位被遮挡后都要被渲染为<strong>不同的颜色</strong>. 如果采用我的方法的话, 那就相当于要<strong>用7个(6 * Behind + 1 * Occluder)摄像机加6层后期特效</strong>, 显然在性能上是不可能的.</p>
+<p>根据我的猜测, 红色警戒3应该是为每个单位额外附加了一个材质, 这个材质只有ZTest Fail的时候才会被渲染. 不知道这个猜测是否正确, 希望能与大家交流.</p>
+<h2>ForceField (护盾特效)</h2>
+<h4>何为ForceField</h4>
+<p><img src="/image/essay5/16.jpg" alt=""></p>
+<p>上图为TitanFall 2的截图. 图中泰坦的周围有一层半球形力场护盾. 如果有子弹打击都护盾上, 则对应被击中位置还会产生纹理上的变化, 并扭曲背景.</p>
+<p>我们注意到这个ForceField与其他物体相交的位置都有高亮的特效. 关于相交高亮(Intersection Highlight)我的<a href="https://zhuanlan.zhihu.com/p/23971284?refer=MeowShader" target="_blank" rel="external">专栏第二篇文章</a>有过介绍.</p>
+<h4>如何实现ForceField</h4>
+<p>实现护盾本身并不难 --- 只需要一个半透明的材质就足够了. 难的是如果护盾被击中的话, 需要在<strong>被击中的位置产生变化</strong>.</p>
+<p>为了解决这个问题, 我们必须将<strong>碰撞点的位置</strong>从世界坐标转换到模型坐标. 然后根据每个点元和碰撞点的距离来决定动态纹理的Alpha值即可.</p>
+<p>$$
+\alpha = A_{init} + \sum _{i = 1} ^{n} \frac {Dist_{i}} {Dist_{max}} \times B
+$$</p>
+<p>为了能够支持多个碰撞点, 可以在着色器中使用n个4*4矩阵以代表4 * n个碰撞点. 每个片元遍历一次所有的碰撞点信息即可. 护盾被击中以后, 其动态纹理的影响会随着时间逐渐减少, 因此动态纹理的Alpha也需要随着时间减弱(见下图).</p>
+<p><img src="/image/essay5/19.gif" alt=""></p>
+<p>时间可以通过脚本或着色器来控制. 只需要注意时间非负即可.</p>
+<p>以下是着色器代码:</p>
+<p><figure class="highlight"><table><tr><td class="code"><pre><div class="line"></div><div class="line">v2f vert ( appdata_base v )</div><div class="line">    &#123;</div><div class="line">        v2f o;</div><div class="line"></div><div class="line">        v.vertex += float4 ( v.normal * _MeshOffset, 0.0 );</div><div class="line"></div><div class="line">        o.pos = UnityObjectToClipPos ( v.vertex );</div><div class="line"></div><div class="line">        o.uv = v.texcoord.xy;</div><div class="line"></div><div class="line">        float3 worldPosition = mul ( UNITY_MATRIX_M, v.vertex );</div><div class="line"></div><div class="line">        float3 viewDirection = normalize ( worldPosition - _WorldSpaceCameraPos );</div><div class="line"></div><div class="line">        o.factor =  ( dot ( UnityObjectToWorldNormal ( v.normal ), viewDirection ) );</div><div class="line"></div><div class="line">        for ( int ii = 0; ii &lt; 4; ii++ )</div><div class="line">        &#123;</div><div class="line">            o.dist[ ii ] = distance ( _CollisionPoints[ ii ].xyz, v.vertex.xyz );</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return o;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    fixed4 frag ( v2f i ) : COLOR</div><div class="line">    &#123;</div><div class="line">        fixed4 finalColor;</div><div class="line"></div><div class="line">        float2 uvNormal = UnpackNormal ( tex2D ( _NormalTex, i.uv * _NormalScale + float2 ( _TilingX * _Time.y, _TilingY * _Time.y ) ) );</div><div class="line"></div><div class="line">        fixed3 color = tex2D ( _MainTex, ( i.uv ) * _MainScale + uvNormal ) * _Color * _Emission;</div><div class="line"></div><div class="line">        float fallOff = saturate ( pow ( 1.0 - i.factor, _FallOff ) * pow ( i.factor, _FallOff2 ) );</div><div class="line"></div><div class="line">        ///Magic Number! </div><div class="line">        half alpha = 0.01;</div><div class="line"></div><div class="line">        alpha += saturate ( pow ( _CollisionTime.x, 0.5 ) - ( float ( i.dist[ 0 ] ) / _MaxDistance ) ) * _BrightnessCollision * max ( sign ( _CollisionTime.x ), 0.0 );</div><div class="line">        alpha += saturate ( pow ( _CollisionTime.y, 0.5 ) - ( float ( i.dist[ 1 ] ) / _MaxDistance ) ) * _BrightnessCollision * max ( sign ( _CollisionTime.y ), 0.0 );</div><div class="line">        alpha += saturate ( pow ( _CollisionTime.z, 0.5 ) - ( float ( i.dist[ 2 ] ) / _MaxDistance ) ) * _BrightnessCollision * max ( sign ( _CollisionTime.z ), 0.0 );</div><div class="line">        alpha += saturate ( pow ( _CollisionTime.w, 0.5 ) - ( float ( i.dist[ 3 ] ) / _MaxDistance ) ) * _BrightnessCollision * max ( sign ( _CollisionTime.w ), 0.0 );</div><div class="line"></div><div class="line">        finalColor.rgb = color;</div><div class="line">        finalColor.a = alpha * pow ( finalColor.b, 2.0 );</div><div class="line"></div><div class="line">        return finalColor;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>以下是用于计算碰撞点模型空间坐标并为着色器赋值的脚本:</p>
+<p><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line">public void ShieldOnWorldSpacePoint (Vector3 point)</div><div class="line">&#123;</div><div class="line">	Vector3 localPosition = transform.InverseTransformPoint (point);</div><div class="line">	Vector4 toShield = new Vector4 (localPosition.x, localPosition.y, localPosition.z, 1f);</div><div class="line">	effectTime[currentIndex] = duration;</div><div class="line">	collisionPoints.SetRow(currentIndex, toShield);</div><div class="line">	material.SetMatrix(&quot;_CollisionPoints&quot;, collisionPoints);</div><div class="line">	material.SetVector(&quot;_CollisionTime&quot;, effectTime);</div><div class="line">	currentIndex++;</div><div class="line">	currentIndex %= 4;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我这里总共使用了一个4*4的矩阵, 因此可以用来表示4个碰撞点. 这实际上已经非常足够了, 因为我们可以将每个碰撞的持续时间缩短, 做到及时更新. 根据我的观察, TitanFall2中的Doom Shield应该也只使用了最多8个碰撞点. 我曾经用Legion(就是拿重机枪的那个, 一秒钟能打十几发子弹)泰坦扫射对面的Doom Shield, 感觉最多也只有6, 7个碰撞点的样子.</p>
+<p>我这里的实现方案没有引入HeatWave, 也就是说护盾被击中后不会扭曲后面的背景. 这是因为在这款游戏中护盾是加在防御塔上的, 而防御塔占据整个屏幕的空间比较小, 因此并不需要将效果做得很精致; 而因为防御塔的数量可能比较多, 因此性能是更大的考量, 所以采用了直接Blend的方式. 如果想要扭曲背景的话, 则使用GrabPass[4], 然后为uv添加一层Bump Map过滤即可[5].</p>
+<h2>Video Glitch (干扰特效)</h2>
+<p>在TitanFall 2中, 游戏以让画面呈现电子干扰的方式来通知玩家泰坦正在承受强大的火力攻击.</p>
+<p><img src="/image/essay5/20.png" alt=""></p>
+<p>在Alienation中, 游戏主界面也会不时地发生类似LCD显示屏模拟信号受到干扰的效果. (此处无图, 因为我在PS4上的截图无论如何也导不出来)</p>
+<p>这种干扰特效归根到底可以分为两部分:</p>
+<blockquote>
+<ol>
+<li>画面的扭曲.</li>
+<li>颜色漂移.</li>
+</ol>
+</blockquote>
+<p>其实这两步的实现都非常简单: 画面的扭曲可以通过更改采样的UV坐标来实现, 而颜色漂移则可以用另一UV坐标采样单独的某个颜色通道, 然后作为输出的颜色中对应的通道.</p>
+<p>代码如下:</p>
+<p><figure class="highlight"><table><tr><td class="code"><pre><div class="line"></div><div class="line">fixed4 frag ( v2f i ) : COLOR</div><div class="line">    &#123;</div><div class="line">        float u = i.uv.x;</div><div class="line">        float v = i.uv.y;</div><div class="line"></div><div class="line">        float horizonNoise = tex2D ( _NoiseTex, float2 ( v, _Time.x ) ) * 2 - 1;</div><div class="line">        horizonNoise *= step ( _Threshold, abs ( horizonNoise ) ) * _Amount;</div><div class="line"></div><div class="line">        float shake = ( tex2D ( _NoiseTex, float2 ( _Time.x, 2 ) - 0.5 ) ) * _Shake;</div><div class="line"></div><div class="line">        float drift = sin ( v + _DriftTime ) * _DriftAmount;</div><div class="line"></div><div class="line">        half4 color = tex2D ( _MainTex, frac ( float2 ( u + jitter + shake, v ) ) );</div><div class="line">        half4 color1 = tex2D ( _MainTex, frac ( float2 ( u + jitter + shake + drift, v ) ) );</div><div class="line"></div><div class="line">        return half4 ( color.r, color.g, color1.b, 1 );</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>最终效果如下:</p>
+<p><img src="/image/essay5/21.gif" alt=""></p>
+<h2>后记</h2>
+<p>以上就是我近几天做的特效. 代码我会尽快上传到Github上, 到时大家多提宝贵意见. 如果有需要完善的地方敬请Raise Issues.</p>
+<p>PS : 大三学生党, 实习工作快到碗里来 ~</p>
+<h2>参考</h2>
+<p>[1] A Trip Down The LOL Graphics Pipleline (JAN 12, 2017), https://engineering.riotgames.com/news/trip-down-lol-graphics-pipeline Retrieved 19:24, March 12, 2017, from Riot Games Engineering.</p>
+<p>[2] https://docs.unity3d.com/Manual/script-EdgeDetectEffect.html</p>
+<p>[3] Sobel operator. (2017, March 5). In Wikipedia, The Free Encyclopedia. Retrieved 01:45, March 13, 2017, from https://en.wikipedia.org/w/index.php?title=Sobel_operator&amp;oldid=768707694</p>
+<p>[4] https://docs.unity3d.com/Manual/SL-GrabPass.html</p>
+<p>[5] https://blogs.unity3d.com/cn/2011/09/08/special-effects-with-depth-talk-at-siggraph/</p>
+
+                <hr>
+                
+                <!-- 多说 Share start -->
+                <div class="ds-share"
+                     style="text-align: right"
+                     data-thread-key="2017/03/12/essay5/"
+                     data-title="游戏特效第五期 - 几种科幻风格的着色器特效"
+                     data-url="http://www.weymire.com/2017/03/12/essay5/"
+                     data-images="http://www.weymire.com/2017/03/12/essay5/essay5.png"
+                     data-content="本文同时也发表在我的知乎专栏 - 大萌喵的Shader相册上😄.
+
+作者：音速键盘猫
+链接：... | Weymire&#39;s Blog ">
+                    <div class="ds-share-inline">
+                        <ul class="ds-share-icons-16">
+                            <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                            <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                            <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                            <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        </ul>
+                        <div class="ds-share-icons-more">
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/01/31/essay1/" data-toggle="tooltip" data-placement="top"
+                           title="SSAO及其优化">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                         data-thread-key="2017/03/12/essay5/"
+                         data-title="游戏特效第五期 - 几种科幻风格的着色器特效"
+                         data-url="http://www.weymire.com/2017/03/12/essay5/">
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">Topics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">Inking (模型描边, Outline)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">何为Inking</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">Inking的实现方法(综述)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">具体实现策略</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">Hologram (模型的全息图)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">何为Hologram</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">第一次尝试(Naive 方法)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">第二次尝试(将深度和法线信息纳入考量)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">See - Through(透视特效)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">何为透视特效</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">如何实现透视特效</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">一个小问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">ForceField (护盾特效)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">何为ForceField</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">如何实现ForceField</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">Video Glitch (干扰特效)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">后记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">参考</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Unity"
+                           title="Unity">Unity</a>
+                        
+                        <a class="tag" href="/tags/#Computer Graphics"
+                           title="Computer Graphics">Computer Graphics</a>
+                        
+                        <a class="tag" href="/tags/#Shader"
+                           title="Shader">Shader</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'yujingping';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user};
+    (function () {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';
+        ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/ehazon">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/yu-jing-ping-64">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/haojen">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/AlphaMistral">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Weymire 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.weymire.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91741512-1';
+    var _gaDomain = 'auto';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = 'a7bea2767d4659bf7b7a4f62100a2a13';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="image/avatar.jpg"><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>
