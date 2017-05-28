@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.weymire.com/"/>
-  <updated>2017-05-28T07:13:36.000Z</updated>
+  <updated>2017-05-28T07:52:27.000Z</updated>
   <id>http://www.weymire.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://www.weymire.com/2017/03/12/essay5/"/>
     <id>http://www.weymire.com/2017/03/12/essay5/</id>
     <published>2017-03-12T13:12:12.000Z</published>
-    <updated>2017-05-28T07:13:36.000Z</updated>
+    <updated>2017-05-28T07:52:27.000Z</updated>
     
     <content type="html"><![CDATA[<script src="/assets/js/DPlayer.min.js"> </script><p>本文同时也发表在我的<a href="https://zhuanlan.zhihu.com/p/25725870" target="_blank" rel="external">知乎专栏 - 大萌喵的Shader相册</a>上😄.</p>
 <blockquote>
@@ -51,7 +51,7 @@
 <h4>Inking的实现方法(综述)</h4>
 <p>Inking的实现方法有很多种, 大体上可以分为操作点元和操作片元两大类. 视具体情况决定使用哪一种Inking:</p>
 <ul>
-<li>Fresnel(菲尼尔)方法 - 非常类似于Rim Lighting, 使用视线方向和点法线方向的点积来判断边缘, 并将边缘高亮化.</li>
+<li>Fresnel(菲涅尔)方法 - 非常类似于Rim Lighting, 使用视线方向和点法线方向的点积来判断边缘, 并将边缘高亮化.</li>
 </ul>
 <blockquote>
 <p>优点: 效率高; 不需要单独的Pass就可以实现; 几乎所有的平滑的边缘都会得到高亮效果; 甚至对透明和半透明物体也有效.</p>
