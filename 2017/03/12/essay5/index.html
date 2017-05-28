@@ -327,7 +327,7 @@ $$</p>
 <h2>ForceField (护盾特效)</h2>
 <h4>何为ForceField</h4>
 <p><img src="/image/essay5/16.jpg" alt=""></p>
-<p>上图为TitanFall 2的截图. 图中泰坦的周围有一层半球形力场护盾. 如果有子弹打击都护盾上, 则对应被击中位置还会产生纹理上的变化, 并扭曲背景.</p>
+<p>上图为TitanFall 2的截图. 图中泰坦的周围有一层半球形力场护盾. 如果有子弹打击到护盾上, 则对应被击中位置还会产生纹理上的变化, 并扭曲背景.</p>
 <p>我们注意到这个ForceField与其他物体相交的位置都有高亮的特效. 关于相交高亮(Intersection Highlight)我的<a href="https://zhuanlan.zhihu.com/p/23971284?refer=MeowShader" target="_blank" rel="external">专栏第二篇文章</a>有过介绍.</p>
 <h4>如何实现ForceField</h4>
 <p>实现护盾本身并不难 --- 只需要一个半透明的材质就足够了. 难的是如果护盾被击中的话, 需要在<strong>被击中的位置产生变化</strong>.</p>
