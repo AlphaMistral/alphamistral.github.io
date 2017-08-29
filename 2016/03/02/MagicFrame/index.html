@@ -3,7 +3,7 @@
 
 <!-- Head tag -->
 <head>
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="null">
@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="/css/blog-style.css">
 
     <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="/css/syntax.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <link rel="stylesheet" href="/css/syntax.css">
 </head>
 
 <style>
@@ -42,7 +42,7 @@
 </style>
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
+<!-- Navigation -->
 <nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
 " data-ishome = "false" >
     <div class="container-fluid">
@@ -131,7 +131,7 @@
 </script>
 
 <!-- Main Content -->
-<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="44193b97-380d-4879-abb2-c395f9798af7";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.im/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+<script src="/assets/js/DPlayer.min.js"></script><link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"></link><script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="44193b97-380d-4879-abb2-c395f9798af7";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.im/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 <!--only post-->
 
 
@@ -195,10 +195,10 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <script src="/assets/js/DPlayer.min.js"> </script><h2>Abstract</h2>
+                <h2>Abstract</h2>
 <p><em>Magic Frame</em> is a 3D game developed with Unity3D as the essential engine, Maya and 3DSMAX as model makers, Photoshop and illustrator as UI designers, Visual Studio as the developing environment and C#, Javascript and Lua as the programming language. It is a multi-platform Puzzle Game available on WP, Android and iOS in which the player has to accumulate clues, figure out problems and utilize various items to find the fact behind the story. In some part of the game, the player also has to experience stealth mode to avoid being detected by robots and other devices. The game is enormously featured in its unparalleled operation method and is also distinguished by its vivid next-generation standardized models to enhance gaming experience.</p>
 <h2>Trailer</h2>
-<p><div id="dplayer0" class="dplayer" style="margin-bottom: 20px;"></div><script>var dplayer0 = new DPlayer({"element":document.getElementById("dplayer0"),"autoplay":false,"theme":"#FADFA3","loop":false,"video":{"url":"http://ol56no7p4.bkt.clouddn.com/MagicFrame.mp4"},"danmaku":{"api":"https://api.prprpr.me/dplayer/","token":"tokendemo"}});</script></p>
+<p><div id="dplayer0" class="dplayer" style="margin-bottom: 20px;"></div><script>var dplayer0 = new DPlayer({"element":document.getElementById("dplayer0"),"autoplay":0,"theme":"#FADFA3","loop":0,"video":{"url":"http://ol56no7p4.bkt.clouddn.com/MagicFrame.mp4"},"danmaku":{"api":"https://api.prprpr.me/dplayer/","token":"tokendemo"}});</script></p>
 <p>Game Introduction is Available at: <a href="http://ol56no7p4.bkt.clouddn.com/MagicFrame.pdf" target="_blank" rel="external">Magic Frame.pdf</a>. You are more than welcomed to download and have a check!</p>
 <h2>Background</h2>
 <p>After a two-days long sleep, our main character, Weymire woke up in a mysterious villadom. Unable to find any way out, anyone alive and any usable clues, he has to investigate more to survive and escape. He found a 3D-functional camera on his desk and it is capable of taking any photograph and take the items in the photograph into practical use. For example he can take the photo of a key, and then his camera would be capable of interacting with the corresponding lock. With this camera equipped, Weymire communicated with many memory clips and found out that the building turned out to be a secret military lab which was working on a new generation robot. The villadom is only a camouflage preventing other people from realizing its existence. Weymire was actually the top scientist in the project, yet he was also against the experiment. The robot is self-productive and could be duplicated into plenty of armies, hence it is a great threat to the human kind. At last Weymire destroyed the lab and exposed the secret to the world.</p>
@@ -504,24 +504,22 @@ frame. However, in order to minimize the negative influences caused by the optim
 <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 <!--wechat title img-->
-<img class="wechat-title-img" src="image/avatar.jpg"><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<img class="wechat-title-img" src="image/avatar.jpg">
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
 </script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>
